@@ -1,0 +1,1771 @@
+/* Delta: seções da página inicial. */
+
+/* Abertura: corte diagonal ---------------------------------------------------------------- */
+.dl-abertura {
+  /* O lado mais baixo continua com 94svh (96svh no celular, para a régua da busca não ficar sob o
+     WhatsApp na primeira tela): a caixa cresce o tamanho do corte. */
+  --corte-hero: clamp(28px, 6vw, 96px);
+  position: relative;
+  height: calc(94svh + var(--corte-hero));
+  min-height: 560px;
+  display: flex;
+  align-items: flex-end;
+  color: var(--hero-text, #ffffff);
+  background: var(--dl-primary);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - var(--corte-hero)));
+  overflow: hidden;
+}
+.dl-abertura__midia {
+  position: absolute;
+  inset: 0;
+}
+/* O vídeo fica 3 px mais baixo que o pôster: assim o pôster continua sendo a maior pintura. */
+.dl-abertura .hero-media video {
+  bottom: auto;
+  height: calc(100% - 3px);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.dl-abertura .hero-media video[data-playing="true"] {
+  opacity: 1;
+}
+.dl-abertura__veu {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(100deg, color-mix(in srgb, var(--dl-primary) 72%, transparent) 0%, transparent 58%),
+    linear-gradient(0deg, color-mix(in srgb, var(--dl-primary) 55%, transparent) 0%, transparent 46%);
+  pointer-events: none;
+}
+.dl-abertura__conteudo {
+  position: relative;
+  z-index: 1;
+  padding-bottom: calc(var(--corte-hero) + clamp(40px, 7vh, 88px));
+}
+.dl-abertura__sai {
+  display: grid;
+  justify-items: start;
+  gap: 18px;
+}
+.dl-abertura__local {
+  animation: dl-placa-entra 0.5s var(--dl-ease) both;
+}
+.dl-abertura__local span {
+  opacity: 0.85;
+}
+.dl-abertura__titulo {
+  display: grid;
+  justify-items: start;
+  gap: 8px;
+  margin: 0;
+  font-size: clamp(36px, 5.6vw, 76px);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+.dl-abertura__placa {
+  position: relative;
+  z-index: 0;
+  display: inline-block;
+  padding: 0.12em 0.42em 0.16em 0.32em;
+  animation: dl-placa-entra 0.55s var(--dl-ease) both;
+  animation-delay: calc(90ms + var(--i, 0) * 90ms);
+}
+.dl-abertura__placa::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: color-mix(in srgb, var(--dl-primary) 58%, transparent);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  clip-path: polygon(0.22em 0, 100% 0, calc(100% - 0.22em) 100%, 0 100%);
+}
+/* A segunda placa desce para a direita, no sentido do corte, na cor da ação. */
+.dl-abertura__placa:nth-child(2) {
+  margin-left: clamp(28px, 6vw, 120px);
+  color: var(--dl-on-action);
+}
+.dl-abertura__placa:nth-child(2)::before {
+  background: color-mix(in srgb, var(--dl-action) 88%, transparent);
+}
+.dl-abertura__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-left: clamp(56px, 12vw, 240px);
+  animation: dl-placa-entra 0.55s var(--dl-ease) both;
+  animation-delay: 300ms;
+}
+@keyframes dl-placa-entra {
+  from {
+    opacity: 0;
+    transform: translate3d(-36px, 8px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+/* Ao rolar, as placas saem pela diagonal (para a esquerda e para cima), fora da linha principal. */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .dl-abertura__sai {
+      animation: dl-abertura-sai linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 70vh;
+    }
+    .dl-abertura__midia {
+      animation: dl-abertura-midia linear both;
+      animation-timeline: scroll(root block);
+      animation-range: 0 100vh;
+    }
+  }
+}
+@keyframes dl-abertura-sai {
+  to {
+    transform: translate3d(-90px, -60px, 0);
+    opacity: 0;
+  }
+}
+@keyframes dl-abertura-midia {
+  to {
+    transform: translate3d(0, 12%, 0);
+  }
+}
+@media (max-width: 767px) {
+  .dl-abertura {
+    --corte-hero: 24px;
+    height: calc(96svh + var(--corte-hero));
+    min-height: 520px;
+  }
+  /* Os botões terminam acima da faixa do WhatsApp mesmo nos celulares baixos (568 px de altura). */
+  .dl-abertura__conteudo {
+    padding-bottom: calc(var(--corte-hero) + 64px);
+  }
+  .dl-abertura__titulo {
+    font-size: clamp(32px, 9.4vw, 44px);
+  }
+  .dl-abertura__placa:nth-child(2) {
+    margin-left: 18px;
+  }
+  .dl-abertura__acoes {
+    margin-left: 0;
+    width: 100%;
+  }
+  .dl-abertura__acoes .dl-btn {
+    flex: 1 1 auto;
+  }
+}
+
+/* Painel de réguas (busca): placa escura atravessando o corte da abertura ------------------- */
+.dl-painel {
+  position: relative;
+  z-index: 3;
+  margin-top: calc(-1 * clamp(40px, 4.6vw, 66px));
+}
+.dl-painel__caixa {
+  --c: 20px;
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(160px, 0.9fr) minmax(150px, 0.8fr) minmax(280px, 1.6fr) minmax(190px, 1fr) auto;
+  align-items: end;
+  gap: 14px 28px;
+  padding: 12px 16px 14px 22px;
+  color: var(--dl-on-primary);
+}
+.dl-painel__caixa--aviso {
+  display: block;
+  padding: 22px 26px;
+}
+.dl-painel__aviso {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+/* O recorte fica numa camada de fundo: na própria caixa ele cortaria a lista de marcas que abre para baixo. */
+.dl-painel__caixa::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--dl-primary);
+  clip-path: polygon(var(--c) 0, 100% 0, 100% calc(100% - var(--c)), calc(100% - var(--c)) 100%, 0 100%, 0 var(--c));
+}
+.dl-painel :focus-visible,
+.dl-painel .dl-btn:focus-visible::before {
+  outline-color: var(--dl-on-primary);
+}
+.dl-painel .dl-escolha__botao {
+  min-height: 50px;
+  background: color-mix(in srgb, var(--dl-on-primary) 8%, transparent);
+  border-color: color-mix(in srgb, var(--dl-on-primary) 24%, transparent);
+  color: var(--dl-on-primary);
+}
+.dl-painel .dl-escolha__botao:hover,
+.dl-painel .dl-escolha[data-aberto] .dl-escolha__botao {
+  border-color: color-mix(in srgb, var(--dl-on-primary) 64%, transparent);
+}
+.dl-painel .dl-escolha__rotulo,
+.dl-painel .dl-escolha__seta,
+.dl-painel .dl-regua__rotulo {
+  color: color-mix(in srgb, var(--dl-on-primary) 74%, var(--dl-primary));
+}
+.dl-painel .dl-escolha__valor[data-vazio] {
+  color: var(--dl-on-primary);
+}
+/* Logos na cor original: no painel escuro, cada um numa plaquinha clara. */
+.dl-painel .dl-escolha__logo-mini {
+  background: #ffffff;
+  border-radius: 3px;
+}
+.dl-painel .dl-escolha__lista {
+  color: var(--dl-ink);
+}
+.dl-painel .dl-regua__trilho {
+  background: color-mix(in srgb, var(--dl-on-primary) 22%, transparent);
+}
+.dl-painel .dl-regua__trilho::after {
+  background: repeating-linear-gradient(
+    to right,
+    color-mix(in srgb, var(--dl-on-primary) 34%, transparent) 0 1px,
+    transparent 1px calc(10% - 0.1px)
+  );
+}
+.dl-painel .dl-regua__polegar {
+  background: var(--dl-on-primary);
+}
+.dl-painel .dl-regua__bandeira {
+  background: var(--dl-on-primary);
+  color: var(--dl-primary);
+}
+/* O rótulo fica ao lado da régua, na altura dela; as bandeiras ficam sobre os polegares. */
+.dl-painel .dl-regua--bandeiras {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: end;
+  column-gap: 14px;
+}
+.dl-painel .dl-regua--bandeiras .dl-regua__cabeca {
+  align-items: center;
+  height: 34px;
+}
+/* A régua do ano fica separada da de preço por um fio, para os polegares não se encostarem. */
+.dl-painel__ano {
+  position: relative;
+  padding-left: 28px;
+}
+.dl-painel__ano::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 1px;
+  background: color-mix(in srgb, var(--dl-on-primary) 20%, transparent);
+}
+.dl-painel__ir {
+  --lamina-fundo: var(--dl-on-primary);
+  --lamina-texto: var(--dl-primary);
+  min-height: 50px;
+  align-self: end;
+}
+.dl-painel__ir:hover {
+  --lamina-fundo: color-mix(in srgb, var(--dl-on-primary) 86%, var(--dl-accent));
+}
+.dl-painel__ir-curto {
+  display: none;
+}
+@media (max-width: 1099px) {
+  .dl-painel__caixa {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .dl-painel__preco {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 1099px) and (min-width: 640px) {
+  .dl-painel__ano {
+    grid-column: 1 / 2;
+    padding-left: 0;
+  }
+  .dl-painel__ano::before {
+    display: none;
+  }
+  .dl-painel__ir {
+    grid-column: 2 / 3;
+  }
+}
+@media (max-width: 639px) {
+  .dl-painel {
+    margin-top: -18px;
+  }
+  .dl-painel__caixa {
+    --c: 14px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+    gap: 12px 10px;
+    padding: 12px 12px 14px;
+  }
+  .dl-painel__preco {
+    order: -1;
+    grid-column: 1 / -1;
+  }
+  .dl-painel .dl-painel__ano {
+    display: none;
+  }
+  .dl-painel .dl-escolha__botao {
+    min-height: 52px;
+    padding: 6px 10px;
+  }
+  .dl-painel__ir {
+    min-height: 52px;
+    padding: 0 16px;
+    gap: 6px;
+  }
+  .dl-painel__ir-longo {
+    display: none;
+  }
+  .dl-painel__ir-curto {
+    display: inline;
+  }
+}
+
+/* Marcas: grade de largada no centro, em que as marcas se ultrapassam ---------------------- */
+.dl-marcas {
+  margin-top: 52px;
+}
+.dl-marcas__corpo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.dl-marcas__titulo {
+  margin: 0;
+  font-size: clamp(20px, 2vw, 24px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--dl-brand-ink);
+}
+/* As posições alternam em duas filas, como numa largada: cada uma meia placa atrás da outra. */
+.dl-marcas__fileira {
+  --escalonar: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 0 6px;
+  margin: 0;
+  padding: 14px 8px 4px;
+  list-style: none;
+}
+.dl-marcas__item {
+  position: relative;
+  flex: 0 0 auto;
+}
+.dl-marcas__item:nth-child(even) {
+  margin-top: var(--escalonar);
+}
+.dl-marcas__item.dl-marcas__item--chegada {
+  margin-top: calc(var(--escalonar) / 2);
+}
+.dl-marcas__item[data-passando] {
+  z-index: 2;
+}
+.dl-marca {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: clamp(84px, 11vw, 116px);
+  padding: 4px 0 14px;
+  color: var(--dl-ink);
+  transition: transform 0.2s var(--dl-ease), color 0.2s;
+}
+/* A marca da posição no asfalto: um traço inclinado embaixo, com a ponta da frente levantada. */
+.dl-marca::before {
+  content: "";
+  position: absolute;
+  left: 16%;
+  right: 16%;
+  bottom: 2px;
+  height: 10px;
+  border-right: 2px solid var(--dl-line);
+  border-bottom: 2px solid var(--dl-line);
+  transform: skewX(-12deg);
+  transition: border-color 0.2s;
+}
+.dl-marca:hover {
+  color: var(--dl-accent-ink);
+  transform: translateY(-2px);
+}
+.dl-marca:hover::before {
+  border-color: var(--dl-accent);
+}
+.dl-site .dl-marca:focus-visible {
+  outline: 2px solid var(--dl-accent-ink);
+  outline-offset: 2px;
+}
+/* Rastro da ultrapassagem: três riscos atrás da marca que passa. */
+.dl-marcas__item[data-passando] .dl-marca::after {
+  content: "";
+  position: absolute;
+  top: 18%;
+  right: calc(100% - 22px);
+  width: 30px;
+  height: 40%;
+  background:
+    linear-gradient(var(--dl-accent) 0 0) 100% 0 / 100% 2px no-repeat,
+    linear-gradient(var(--dl-accent) 0 0) 100% 50% / 70% 2px no-repeat,
+    linear-gradient(var(--dl-accent) 0 0) 100% 100% / 45% 2px no-repeat;
+  animation: dl-rastro 0.76s ease-out both;
+  pointer-events: none;
+}
+@keyframes dl-rastro {
+  0% {
+    opacity: 0;
+    transform: translateX(12px);
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+}
+/* Caixa quadrada como os arquivos dos logos: o enquadramento do `box` da API cai certo. */
+.dl-marca__logo {
+  position: relative;
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+}
+.dl-marca__logo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+.dl-marca__nome {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+/* Chegada: placa escura em lâmina com a faixa quadriculada, à frente da grade. */
+.dl-marca--chegada {
+  flex-direction: row;
+  justify-content: center;
+  gap: 8px;
+  width: clamp(124px, 15vw, 164px);
+  height: 56px;
+  padding: 0 20px 0 16px;
+  color: var(--dl-on-primary);
+}
+.dl-marca--chegada::before {
+  inset: 0 8px;
+  z-index: -1;
+  height: auto;
+  border: 0;
+  background: var(--dl-primary);
+  transition: background-color 0.2s;
+}
+.dl-marca--chegada:hover {
+  color: var(--dl-on-primary);
+}
+.dl-marca--chegada:hover::before {
+  background: color-mix(in srgb, var(--dl-primary) 84%, var(--dl-accent));
+}
+.dl-marca__xadrez {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 40px;
+  background: repeating-conic-gradient(var(--dl-on-primary) 0 25%, transparent 0 50%) 0 0 / 8px 8px;
+  transform: skewX(-12deg);
+}
+.dl-marca--chegada .dl-marca__nome {
+  font-size: 14px;
+  white-space: normal;
+}
+.dl-marca--chegada svg {
+  flex: 0 0 auto;
+}
+.dl-marcas__outras {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--dl-accent-ink);
+}
+.dl-marcas__outras:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+/* Celular: só os logos (o nome fica para o leitor de tela), as cinco marcas e a chegada. */
+@media (max-width: 639px) {
+  .dl-marcas {
+    margin-top: 36px;
+  }
+  .dl-marcas__fileira {
+    --escalonar: 22px;
+    gap: 0 2px;
+    padding: 12px 0 2px;
+  }
+  .dl-marca {
+    width: 54px;
+    padding: 2px 0 12px;
+  }
+  .dl-marca__logo {
+    width: 36px;
+    height: 36px;
+  }
+  .dl-marca:not(.dl-marca--chegada) .dl-marca__nome {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .dl-marca--chegada {
+    width: 74px;
+    height: 46px;
+    gap: 5px;
+    padding: 0 10px 0 9px;
+  }
+  .dl-marca--chegada::before {
+    inset: 0 5px;
+  }
+  .dl-marca__xadrez {
+    width: 10px;
+    height: 28px;
+    background-size: 5px 5px;
+  }
+  .dl-marca--chegada .dl-marca__nome {
+    font-size: 13px;
+  }
+  .dl-marca__resto,
+  .dl-marca--chegada svg {
+    display: none;
+  }
+  .dl-marcas__item[data-passando] .dl-marca::after {
+    width: 18px;
+    right: calc(100% - 10px);
+  }
+}
+/* Telas estreitas: a chegada só com a bandeira (o nome continua no rótulo do link). */
+@media (max-width: 389px) {
+  .dl-marca {
+    width: 48px;
+  }
+  .dl-marca--chegada {
+    width: 46px;
+    padding: 0 6px;
+  }
+  .dl-marca--chegada .dl-marca__nome {
+    display: none;
+  }
+}
+@media (max-width: 339px) {
+  .dl-marca {
+    width: 44px;
+  }
+  .dl-marca__logo {
+    width: 30px;
+    height: 30px;
+  }
+  .dl-marca--chegada {
+    width: 42px;
+  }
+}
+
+/* Cartas de carroceria que viram: cantos cortados ------------------------------------------ */
+.dl-carrocerias {
+  margin-top: 64px;
+}
+.dl-carrocerias__fileira {
+  display: flex;
+  gap: 16px;
+  margin: 0;
+  padding: 4px 2px 14px;
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+  scrollbar-color: var(--dl-accent) transparent;
+}
+.dl-carroceria {
+  --c: 20px;
+  flex: 0 0 auto;
+  width: clamp(260px, 24vw, 300px);
+  height: 300px;
+  perspective: 1200px;
+  scroll-snap-align: start;
+}
+.dl-carroceria__giro {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s var(--dl-ease);
+}
+.dl-carroceria--virada .dl-carroceria__giro {
+  transform: rotateY(180deg);
+}
+.dl-carroceria__lado {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  clip-path: polygon(var(--c) 0, 100% 0, 100% calc(100% - var(--c)), calc(100% - var(--c)) 100%, 0 100%, 0 var(--c));
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+.dl-carroceria__lado--frente {
+  padding: 1px;
+  background: var(--dl-line);
+}
+.dl-carroceria__dentro {
+  --c2: calc(var(--c) - 0.6px);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  background: var(--dl-raised);
+  clip-path: polygon(var(--c2) 0, 100% 0, 100% calc(100% - var(--c2)), calc(100% - var(--c2)) 100%, 0 100%, 0 var(--c2));
+}
+.dl-carroceria__lado--verso {
+  transform: rotateY(180deg);
+  padding: 20px 20px 16px;
+  gap: 12px;
+  background: var(--dl-primary);
+  color: var(--dl-on-primary);
+}
+.dl-carroceria__foto {
+  position: relative;
+  flex: 1 1 auto;
+  display: block;
+  background: var(--dl-soft);
+}
+.dl-carroceria__foto img {
+  object-fit: cover;
+  transition: transform 0.6s var(--dl-ease);
+}
+@media (hover: hover) and (pointer: fine) {
+  .dl-carroceria__foto:hover img {
+    transform: scale(1.04);
+  }
+}
+.dl-carroceria__pe {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 10px 10px 18px;
+}
+.dl-carroceria__nome {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.dl-carroceria__virar {
+  min-height: 40px;
+  padding: 0 16px;
+  font-size: 13px;
+  font-weight: 800;
+  --lamina-texto: var(--dl-brand-ink);
+}
+.dl-carroceria__lado--verso .dl-carroceria__virar {
+  --lamina-fundo: transparent;
+  --lamina-borda: color-mix(in srgb, var(--dl-on-primary) 36%, transparent);
+  --lamina-texto: var(--dl-on-primary);
+}
+.dl-carroceria__lado--verso .dl-carroceria__virar:hover {
+  --lamina-borda: var(--dl-on-primary);
+}
+.dl-carroceria__modelos {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  flex: 1 1 auto;
+  overflow: hidden;
+}
+.dl-carroceria__modelos a {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 40px;
+  padding: 8px 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--dl-on-primary) 14%, transparent);
+  font-size: 14px;
+}
+.dl-carroceria__modelos a span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.dl-carroceria__modelos a strong {
+  flex: 0 0 auto;
+  font-weight: 800;
+}
+.dl-carroceria__modelos a:hover span {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.dl-carroceria__vazio {
+  flex: 1 1 auto;
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.85;
+}
+.dl-carroceria__acoes {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.dl-carroceria__todos {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  font-size: 14px;
+  font-weight: 800;
+}
+@media (prefers-reduced-motion: reduce) {
+  .dl-carroceria__giro {
+    transform: none !important;
+    transition: none;
+  }
+  .dl-carroceria__lado--verso {
+    transform: none;
+    visibility: hidden;
+  }
+  .dl-carroceria--virada .dl-carroceria__lado--verso {
+    visibility: visible;
+  }
+  .dl-carroceria--virada .dl-carroceria__lado--frente {
+    visibility: hidden;
+  }
+}
+@media (max-width: 639px) {
+  .dl-carrocerias {
+    margin-top: 48px;
+  }
+  .dl-carrocerias .dl-setas {
+    display: none;
+  }
+  .dl-carroceria {
+    width: 260px;
+    height: 280px;
+  }
+}
+
+/* Pole: vitrine ----------------------------------------------------------------------------- */
+.dl-grid {
+  margin-top: 72px;
+}
+.dl-grid__unico {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--dl-muted);
+}
+.dl-grid__pista {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 18px;
+  align-items: stretch;
+}
+.dl-grid__pista--so {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 760px;
+}
+/* O pole cresce até a base da grade ao lado: a foto ocupa a altura que sobra. */
+.dl-grid__frente,
+.dl-grid__frente > div {
+  display: flex;
+  min-width: 0;
+}
+.dl-grid__frente > div {
+  flex: 1 1 auto;
+}
+.dl-pole {
+  --c: 24px;
+  flex: 1 1 auto;
+  display: flex;
+  min-width: 0;
+  padding: 1px;
+  background: var(--dl-line);
+  clip-path: polygon(var(--c) 0, 100% 0, 100% calc(100% - var(--c)), calc(100% - var(--c)) 100%, 0 100%, 0 var(--c));
+}
+.dl-pole__dentro {
+  --c2: calc(var(--c) - 0.6px);
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--dl-raised);
+  clip-path: polygon(var(--c2) 0, 100% 0, 100% calc(100% - var(--c2)), calc(100% - var(--c2)) 100%, 0 100%, 0 var(--c2));
+}
+.dl-pole__foto {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 340px;
+  background: var(--dl-soft);
+}
+.dl-pole__foto img {
+  object-fit: cover;
+  animation: dl-aparece-foto 0.35s var(--dl-ease) both;
+}
+@keyframes dl-aparece-foto {
+  from {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.dl-pole__selo {
+  position: absolute;
+  top: 16px;
+  left: 18px;
+  z-index: 2;
+  padding: 6px 12px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--dl-raised) 92%, transparent);
+  color: var(--dl-brand-ink);
+  font-size: 12px;
+  font-weight: 800;
+}
+.dl-pole .dl-preco {
+  padding: 10px 34px 10px 20px;
+}
+.dl-pole .dl-preco__valor {
+  font-size: 24px;
+}
+/* Miniaturas por cima da foto, no canto de baixo à direita, numa faixa de vidro escuro. */
+.dl-pole__miniaturas {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  z-index: 2;
+  display: flex;
+  gap: 6px;
+  padding: 6px 14px;
+  background: color-mix(in srgb, var(--dl-primary) 58%, transparent);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+}
+.dl-pole__mini {
+  position: relative;
+  width: 62px;
+  height: 44px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  padding: 0;
+  background: var(--dl-soft);
+  cursor: pointer;
+  opacity: 0.72;
+  transition: opacity 0.2s, border-color 0.2s;
+}
+.dl-pole__mini img {
+  object-fit: cover;
+}
+.dl-pole__mini[aria-pressed="true"],
+.dl-pole__mini:hover {
+  opacity: 1;
+  border-color: var(--dl-on-primary);
+}
+.dl-pole__corpo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 14px 22px 16px;
+}
+.dl-pole__texto {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+.dl-pole__marca {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--dl-accent-ink);
+}
+.dl-pole__titulo {
+  margin: 0;
+  font-size: clamp(18px, 1.6vw, 22px);
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+  color: var(--dl-ink);
+}
+.dl-pole__ficha {
+  margin: 2px 0 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--dl-muted);
+}
+.dl-pole__ver {
+  flex: 0 0 auto;
+}
+.dl-grid__atras {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.dl-vez {
+  --c: 16px;
+  height: 100%;
+  padding: 1px;
+  background: var(--dl-line);
+  clip-path: polygon(var(--c) 0, 100% 0, 100% calc(100% - var(--c)), calc(100% - var(--c)) 100%, 0 100%, 0 var(--c));
+  transition: background-color 0.25s;
+}
+.dl-vez:hover {
+  background: var(--dl-brand-ink);
+}
+.dl-vez__dentro {
+  --c2: calc(var(--c) - 0.6px);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--dl-raised);
+  clip-path: polygon(var(--c2) 0, 100% 0, 100% calc(100% - var(--c2)), calc(100% - var(--c2)) 100%, 0 100%, 0 var(--c2));
+}
+.dl-vez__frente {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+.dl-site .dl-vez__frente:focus-visible {
+  outline-offset: -4px;
+}
+.dl-vez__foto {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 3;
+  background: var(--dl-soft);
+}
+.dl-vez__foto img {
+  object-fit: cover;
+}
+.dl-vez__frente::after {
+  content: "Pôr na frente";
+  position: absolute;
+  left: 12px;
+  bottom: 10px;
+  padding: 5px 14px;
+  background: color-mix(in srgb, var(--dl-primary) 86%, transparent);
+  color: var(--dl-on-primary);
+  clip-path: polygon(5px 0, 100% 0, calc(100% - 5px) 100%, 0 100%);
+  font-size: 12px;
+  font-weight: 800;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.2s, transform 0.25s var(--dl-ease);
+}
+@media (hover: hover) and (pointer: fine) {
+  .dl-vez__frente:hover::after,
+  .dl-vez__frente:focus-visible::after {
+    opacity: 1;
+    transform: none;
+  }
+}
+.dl-vez__corpo {
+  display: grid;
+  gap: 2px;
+  padding: 10px 14px 14px;
+}
+.dl-vez__titulo {
+  min-height: 40px;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--dl-ink);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.dl-vez__titulo:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.dl-vez__ficha {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--dl-muted);
+}
+.dl-vez__preco {
+  margin-top: 4px;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--dl-brand-ink);
+}
+@media (max-width: 899px) {
+  .dl-grid__pista {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .dl-pole__foto {
+    flex: 0 0 auto;
+    min-height: 0;
+    aspect-ratio: 4 / 3;
+  }
+  .dl-pole__miniaturas {
+    top: 12px;
+    bottom: auto;
+    right: 12px;
+    padding: 5px 10px;
+  }
+  .dl-pole__mini {
+    width: 54px;
+    height: 40px;
+  }
+  .dl-grid__atras {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    scroll-snap-type: x proximity;
+    scrollbar-width: thin;
+    scrollbar-color: var(--dl-accent) transparent;
+  }
+  .dl-grid__vez {
+    flex: 0 0 auto;
+    width: 220px;
+    scroll-snap-align: start;
+  }
+}
+@media (max-width: 639px) {
+  .dl-grid {
+    margin-top: 56px;
+  }
+  .dl-pole {
+    --c: 18px;
+  }
+  .dl-pole .dl-preco__valor {
+    font-size: 20px;
+  }
+  .dl-pole__corpo {
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 12px 16px 16px;
+  }
+  .dl-pole__ver {
+    flex: 1 1 auto;
+  }
+}
+
+/* Venda em três toques: placa partida por um corte diagonal -------------------------------- */
+.dl-venda {
+  margin-top: 72px;
+}
+.dl-venda__caixa {
+  --c: 22px;
+  --c2: calc(var(--c) - 0.6px);
+  --corte-venda: 46px;
+  display: grid;
+  grid-template-columns: minmax(300px, 0.8fr) minmax(0, 1.7fr);
+  padding: 1px;
+  background: var(--dl-line);
+  clip-path: polygon(var(--c) 0, 100% 0, 100% calc(100% - var(--c)), calc(100% - var(--c)) 100%, 0 100%, 0 var(--c));
+}
+.dl-venda__lado {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  align-content: center;
+  gap: 12px;
+  margin-right: calc(-1 * var(--corte-venda));
+  padding: 22px calc(var(--corte-venda) + 26px) 20px 30px;
+  background: var(--dl-primary);
+  color: var(--dl-on-primary);
+  clip-path: polygon(var(--c2) 0, 100% 0, calc(100% - var(--corte-venda)) 100%, 0 100%, 0 var(--c2));
+}
+.dl-venda__titulo {
+  margin: 0;
+  font-size: clamp(22px, 2.1vw, 28px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.dl-venda__etapas {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.dl-venda__etapas li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  color: color-mix(in srgb, var(--dl-on-primary) 74%, var(--dl-primary));
+}
+.dl-venda__etapas li[aria-current="step"] {
+  color: var(--dl-on-primary);
+}
+.dl-venda__marca {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 28px;
+  height: 22px;
+  background: color-mix(in srgb, var(--dl-on-primary) 16%, transparent);
+  color: var(--dl-on-primary);
+  clip-path: polygon(5px 0, 100% 0, calc(100% - 5px) 100%, 0 100%);
+  font-size: 12px;
+  font-weight: 800;
+}
+.dl-venda__etapas li[aria-current="step"] .dl-venda__marca {
+  background: var(--dl-on-primary);
+  color: var(--dl-primary);
+}
+.dl-venda__etapas li[data-feita] .dl-venda__marca {
+  background: var(--dl-action);
+  color: var(--dl-on-action);
+}
+.dl-venda__financiar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 8px;
+  margin: 0;
+  font-size: 14px;
+  color: color-mix(in srgb, var(--dl-on-primary) 82%, var(--dl-primary));
+}
+.dl-venda__financiar a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  font-weight: 800;
+  color: var(--dl-on-primary);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+.dl-venda__palco {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  min-height: 196px;
+  padding: 20px 28px 20px calc(var(--corte-venda) + 30px);
+  overflow: hidden;
+  background: var(--dl-raised);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--c2)), calc(100% - var(--c2)) 100%, 0 100%);
+}
+.dl-venda__passo {
+  display: grid;
+  gap: 12px;
+  width: 100%;
+}
+.dl-venda__pergunta {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+}
+.dl-venda__modos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 8px;
+}
+/* Formas de negociar: lâminas grandes, com o nome e uma linha de explicação. */
+.dl-opcao {
+  --lamina-fundo: var(--dl-soft);
+  --lamina-borda: var(--dl-line);
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  align-content: center;
+  gap: 3px;
+  min-height: 78px;
+  padding: 10px 30px;
+  border: 0;
+  background: none;
+  color: var(--dl-ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.dl-opcao::before {
+  content: "";
+  position: absolute;
+  inset: 0 9px;
+  z-index: -1;
+  background: var(--lamina-fundo);
+  border: 1px solid var(--lamina-borda);
+  transform: skewX(-12deg);
+  transition: border-color 0.2s, background-color 0.2s;
+}
+.dl-opcao:hover,
+.dl-opcao--ativa {
+  --lamina-borda: var(--dl-brand-ink);
+}
+.dl-site .dl-opcao:focus-visible {
+  outline: none;
+}
+.dl-opcao:focus-visible::before {
+  outline: 2px solid var(--dl-accent-ink);
+  outline-offset: 3px;
+}
+.dl-opcao strong {
+  font-size: 16px;
+}
+.dl-opcao span {
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--dl-muted);
+}
+.dl-venda__form {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr) minmax(0, 0.6fr);
+  align-items: end;
+}
+.dl-venda__acoes {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+/* Só o financiamento (sem a página Vender): uma lâmina escura de uma linha. */
+.dl-venda--so-financiar .dl-venda__lado {
+  margin: 0;
+  padding: 12px 40px 12px 30px;
+  clip-path: polygon(16px 0, 100% 0, calc(100% - 16px) 100%, 0 100%);
+}
+@media (max-width: 899px) {
+  .dl-venda__caixa {
+    --corte-venda: 18px;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .dl-venda__lado {
+    margin: 0 0 calc(-1 * var(--corte-venda));
+    padding: 20px 18px calc(var(--corte-venda) + 14px);
+    gap: 10px;
+    clip-path: polygon(var(--c2) 0, 100% 0, 100% calc(100% - var(--corte-venda)), 0 100%, 0 var(--c2));
+  }
+  .dl-venda__etapas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+  }
+  /* No celular, só a etapa da vez mostra o nome; as outras ficam no número (o nome segue para o leitor de tela). */
+  .dl-venda__etapas li:not([aria-current="step"]) {
+    gap: 0;
+  }
+  .dl-venda__etapas li:not([aria-current="step"]) .dl-venda__etapa-nome {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .dl-venda__palco {
+    min-height: 0;
+    padding: calc(var(--corte-venda) + 14px) 16px 18px;
+  }
+}
+@media (max-width: 599px) {
+  .dl-venda {
+    margin-top: 56px;
+  }
+  .dl-venda__caixa {
+    --c: 16px;
+  }
+  .dl-venda__modos {
+    grid-template-columns: repeat(auto-fit, minmax(92px, 1fr));
+    gap: 4px;
+  }
+  .dl-opcao {
+    min-height: 48px;
+    padding: 6px 18px;
+    place-items: center;
+    text-align: center;
+  }
+  .dl-opcao span {
+    display: none;
+  }
+  .dl-opcao strong {
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  .dl-venda__form {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.6fr);
+  }
+  .dl-venda__form .dl-campo:nth-of-type(2) {
+    grid-column: 1 / -1;
+    order: -1;
+  }
+  .dl-venda__form .dl-campo:first-of-type {
+    order: -2;
+    grid-column: 1 / -1;
+  }
+  .dl-venda__acoes .dl-btn--acao {
+    flex: 1 1 auto;
+  }
+}
+
+/* Rolo de vozes (avaliações) ------------------------------------------------------------------ */
+.dl-vozes {
+  margin-top: 76px;
+}
+.dl-vozes__caixa {
+  display: grid;
+  grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.5fr);
+  gap: 18px 48px;
+  align-items: center;
+}
+.dl-vozes__titulo {
+  margin: 0 0 10px;
+  font-size: clamp(24px, 2.6vw, 34px);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  color: var(--dl-brand-ink);
+}
+.dl-vozes__fonte {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--dl-muted);
+}
+.dl-vozes__nota {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0 0;
+}
+.dl-vozes__nota strong {
+  font-size: 28px;
+  font-weight: 800;
+}
+.dl-estrelas {
+  display: inline-flex;
+  gap: 2px;
+  color: #e3a008;
+}
+.dl-estrelas [data-vazia] {
+  color: var(--dl-line);
+}
+.dl-vozes__palco {
+  display: grid;
+  gap: 12px;
+}
+/* A janela não tem caixa própria: as avaliações passam soltas, esmaecidas só do lado em que há mais. */
+.dl-vozes__janela {
+  position: relative;
+  height: 262px;
+  overflow: hidden;
+}
+.dl-vozes__janela[data-acima][data-abaixo] {
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 16%, #000 84%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0, #000 16%, #000 84%, transparent 100%);
+}
+.dl-vozes__janela[data-acima]:not([data-abaixo]) {
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 16%);
+  mask-image: linear-gradient(180deg, transparent 0, #000 16%);
+}
+.dl-vozes__janela[data-abaixo]:not([data-acima]) {
+  -webkit-mask-image: linear-gradient(180deg, #000 84%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 84%, transparent 100%);
+}
+.dl-vozes__lista {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  transition: transform 0.55s var(--dl-ease);
+  will-change: transform;
+}
+.dl-voz {
+  --c: 16px;
+  padding: 1px;
+  background: var(--dl-line);
+  clip-path: polygon(var(--c) 0, 100% 0, 100% calc(100% - var(--c)), calc(100% - var(--c)) 100%, 0 100%, 0 var(--c));
+  opacity: 0.45;
+  transform: scale(0.96);
+  transform-origin: left center;
+  cursor: pointer;
+  transition: opacity 0.4s, transform 0.5s var(--dl-ease), background-color 0.4s;
+}
+.dl-voz--foco {
+  opacity: 1;
+  transform: none;
+  cursor: auto;
+  background: color-mix(in srgb, var(--dl-brand-ink) 34%, var(--dl-bg));
+}
+.dl-voz__dentro {
+  --c2: calc(var(--c) - 0.6px);
+  display: grid;
+  gap: 6px;
+  padding: 14px 20px;
+  background: var(--dl-raised);
+  clip-path: polygon(var(--c2) 0, 100% 0, 100% calc(100% - var(--c2)), calc(100% - var(--c2)) 100%, 0 100%, 0 var(--c2));
+}
+.dl-voz__topo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.dl-voz__rosto {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--dl-primary);
+  color: var(--dl-on-primary);
+  font-size: 14px;
+  font-weight: 800;
+}
+.dl-voz__rosto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.dl-voz__nome {
+  flex: 1 1 auto;
+  font-size: 15px;
+  font-weight: 800;
+}
+.dl-voz__texto {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.55;
+}
+.dl-voz:not(.dl-voz--foco) .dl-voz__texto,
+.dl-voz__texto--corta {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.dl-voz:not(.dl-voz--foco) .dl-voz__texto {
+  -webkit-line-clamp: 2;
+}
+.dl-voz__ler {
+  justify-self: start;
+  min-height: 40px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--dl-accent-ink);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.dl-vozes__botoes {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.dl-vozes__trilho {
+  flex: 1 1 auto;
+  height: 3px;
+  background: var(--dl-line);
+  overflow: hidden;
+}
+.dl-vozes__trilho span {
+  display: block;
+  height: 100%;
+  background: var(--dl-accent);
+  transform-origin: left center;
+  transition: transform 0.4s var(--dl-ease);
+}
+@media (max-width: 899px) {
+  .dl-vozes__caixa {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .dl-vozes__janela {
+    height: 300px;
+  }
+}
+@media (max-width: 599px) {
+  .dl-vozes {
+    margin-top: 56px;
+  }
+  .dl-vozes__titulo {
+    margin-bottom: 6px;
+  }
+  .dl-vozes__janela {
+    height: 236px;
+  }
+  .dl-voz__dentro {
+    padding: 12px 16px;
+  }
+}
+
+/* Placa de chegada (contato) ----------------------------------------------------------------- */
+.dl-chegada {
+  margin-top: 76px;
+}
+.dl-chegada__mapa {
+  --c: 22px;
+  position: relative;
+  height: 260px;
+  overflow: hidden;
+  background:
+    repeating-linear-gradient(-12deg, transparent 0 58px, color-mix(in srgb, var(--dl-ink) 7%, transparent) 58px 64px),
+    repeating-linear-gradient(78deg, transparent 0 84px, color-mix(in srgb, var(--dl-ink) 6%, transparent) 84px 90px),
+    var(--dl-soft);
+  clip-path: polygon(var(--c) 0, 100% 0, 100% 100%, 0 100%, 0 var(--c));
+}
+.dl-chegada__mapa iframe {
+  position: absolute;
+  top: -60px;
+  left: 0;
+  width: 125%;
+  height: calc(100% + 120px);
+  border: 0;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.dl-chegada__mapa iframe[data-ready="true"] {
+  opacity: 1;
+}
+.dl-chegada__ruas {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 12px;
+  padding-bottom: 60px;
+  text-align: center;
+}
+.dl-chegada__ruas p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--dl-muted);
+}
+/* Antes do aceite: um marcador da loja sobre o desenho de ruas, e a faixa mais baixa. No
+   computador o aviso fica na parte livre, à direita da placa do contato. */
+.dl-chegada__mapa:not([data-aberto]) {
+  height: 220px;
+}
+@media (min-width: 900px) {
+  .dl-chegada__mapa:not([data-aberto]) .dl-chegada__ruas {
+    left: auto;
+    width: 44%;
+    padding-bottom: 0;
+  }
+}
+.dl-chegada__alfinete {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 38px;
+  background: var(--dl-primary);
+  color: var(--dl-on-primary);
+  clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+}
+.dl-chegada__baixo {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 20px 32px;
+  align-items: start;
+}
+.dl-chegada__placa {
+  position: relative;
+  z-index: 1;
+  margin-top: -92px;
+  margin-left: clamp(0px, 3vw, 32px);
+  padding: 1px;
+  background: var(--dl-line);
+  clip-path: polygon(0 0, 100% 0, calc(100% - 22px) 100%, 0 100%);
+}
+.dl-chegada__placa-dentro {
+  display: grid;
+  gap: 10px;
+  padding: 20px 44px 18px 26px;
+  background: var(--dl-raised);
+  clip-path: polygon(0 0, calc(100% - 0.4px) 0, calc(100% - 22px) 100%, 0 100%);
+}
+.dl-chegada__titulo {
+  margin: 0;
+  font-size: clamp(20px, 2vw, 26px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--dl-brand-ink);
+}
+.dl-chegada__endereco {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.45;
+}
+.dl-chegada__endereco svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: var(--dl-accent-ink);
+}
+.dl-chegada__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.dl-chegada__modos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+.dl-chegada__pergunta {
+  margin-right: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--dl-ink);
+}
+.dl-chip--link:hover {
+  --lamina-fundo: var(--dl-primary);
+  --lamina-borda: var(--dl-primary);
+  --lamina-texto: var(--dl-on-primary);
+}
+.dl-chegada__dados {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 20px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.dl-chegada__dados li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.dl-chegada__dados svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: var(--dl-accent-ink);
+}
+.dl-chegada__dados li > span {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  font-size: 14px;
+  line-height: 1.45;
+}
+.dl-chegada__dados strong {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--dl-ink);
+}
+.dl-chegada__dados a {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  overflow-wrap: anywhere;
+  color: var(--dl-accent-ink);
+  font-weight: 700;
+}
+@media (max-width: 899px) {
+  .dl-chegada__mapa,
+  .dl-chegada__mapa:not([data-aberto]) {
+    --c: 16px;
+    height: 200px;
+  }
+  .dl-chegada__mapa iframe {
+    width: 100%;
+  }
+  .dl-chegada__ruas {
+    padding-bottom: 40px;
+  }
+  .dl-chegada__baixo {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .dl-chegada__placa {
+    margin: -48px 10px 0;
+  }
+  .dl-chegada__placa-dentro {
+    padding: 18px 30px 16px 18px;
+  }
+  .dl-chegada__dados {
+    margin-top: 4px;
+  }
+}
+@media (max-width: 599px) {
+  .dl-chegada {
+    margin-top: 56px;
+  }
+  /* "Como você vem?" numa linha e os três jeitos lado a lado embaixo. */
+  .dl-chegada__modos {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    justify-content: start;
+    gap: 6px 2px;
+  }
+  .dl-chegada__pergunta {
+    grid-column: 1 / -1;
+  }
+  .dl-chegada__modos .dl-chip {
+    padding: 0 14px;
+    font-size: 13px;
+  }
+}
+@media (max-width: 599px) {
+  .dl-chegada__dados {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+  .dl-chegada__dados li > span {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    column-gap: 8px;
+  }
+  .dl-chegada__dados a {
+    min-height: 40px;
+  }
+}
+
+/* Busca em telas bem estreitas: o botão volta a ser só a seta (o nome fica no rótulo) e os
+   seletores ganham o espaço, sem cortar "Todas". */
+@media (max-width: 359px) {
+  .dl-painel__ir-curto {
+    display: none;
+  }
+  .dl-painel__ir {
+    padding: 0 14px;
+  }
+  .dl-painel .dl-escolha__botao {
+    padding: 6px 8px;
+  }
+  .dl-painel .dl-escolha__seta {
+    display: none;
+  }
+}

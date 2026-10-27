@@ -1,0 +1,258 @@
+[
+  {
+    "id": "showcase-1",
+    "slug": "apex-1",
+    "brand": "Fiat",
+    "model": "ARGO ARGO TREKKING 1.3 8V Flex",
+    "title": "Fiat ARGO 2020",
+    "year": 2020,
+    "km": 72653,
+    "price": 72900,
+    "transmission": "Automático",
+    "fuel": "Flex",
+    "color": "Vermelho",
+    "power": "109 cv",
+    "segment": "Hatch",
+    "badges": ["destaque"],
+    "photos": [
+      "/showcase/vehicle-1-1.webp",
+      "/showcase/vehicle-1-2.webp",
+      "/showcase/vehicle-1-3.webp",
+      "/showcase/vehicle-1-4.webp"
+    ]
+  },
+  {
+    "id": "showcase-2",
+    "slug": "apex-2",
+    "brand": "Chevrolet",
+    "model": "ONIX ONIX HATCH LT 1.0 12V TB Flex 5p Mec.",
+    "title": "Chevrolet ONIX 2024",
+    "year": 2024,
+    "km": 35525,
+    "price": 75900,
+    "transmission": "Manual",
+    "fuel": "Flex",
+    "color": "Branco",
+    "power": "1 cv",
+    "segment": "Hatch",
+    "badges": ["destaque"],
+    "photos": [
+      "/showcase/vehicle-2-1.webp",
+      "/showcase/vehicle-2-2.webp",
+      "/showcase/vehicle-2-3.webp",
+      "/showcase/vehicle-2-4.webp"
+    ]
+  },
+  {
+    "id": "showcase-3",
+    "slug": "apex-3",
+    "brand": "Fiat",
+    "model": "CRONOS CRONOS DRIVE 1.3 8V Flex",
+    "title": "Fiat CRONOS 2024",
+    "year": 2024,
+    "km": 54366,
+    "price": 79900,
+    "transmission": "Manual",
+    "fuel": "Flex",
+    "color": "Branco",
+    "segment": "Sedã",
+    "badges": ["destaque"],
+    "photos": [
+      "/showcase/vehicle-3-1.webp",
+      "/showcase/vehicle-3-2.webp",
+      "/showcase/vehicle-3-3.webp",
+      "/showcase/vehicle-3-4.webp"
+    ]
+  },
+  {
+    "id": "showcase-4",
+    "slug": "apex-4",
+    "brand": "Fiat",
+    "model": "Strada Strada Endurance 1.3 Flex 8V CS Plus",
+    "title": "Fiat Strada 2024",
+    "year": 2024,
+    "km": 65364,
+    "price": 80000,
+    "transmission": "Manual",
+    "fuel": "Flex",
+    "color": "Branco",
+    "segment": "Picapes",
+    "badges": ["destaque"],
+    "photos": [
+      "/showcase/vehicle-4-1.webp",
+      "/showcase/vehicle-4-2.webp",
+      "/showcase/vehicle-4-3.webp",
+      "/showcase/vehicle-4-4.webp"
+    ]
+  },
+  {
+    "id": "showcase-5",
+    "slug": "apex-5",
+    "brand": "Fiat",
+    "model": "ARGO ARGO HGT 1.8 16V Flex Aut.",
+    "title": "Fiat ARGO 2021",
+    "year": 2021,
+    "km": 38505,
+    "price": 82900,
+    "transmission": "Automático",
+    "fuel": "Flex",
+    "color": "Cinza",
+    "segment": "Hatch",
+    "badges": ["destaque"],
+    "photos": [
+      "/showcase/vehicle-5-1.webp",
+      "/showcase/vehicle-5-2.webp",
+      "/showcase/vehicle-5-3.webp",
+      "/showcase/vehicle-5-4.webp"
+    ]
+  },
+  {
+    "id": "showcase-6",
+    "slug": "apex-6",
+    "brand": "Volkswagen",
+    "model": "Polo Polo Comfort. 200 TSI 1.0 Flex 12V Aut.",
+    "title": "Volkswagen Polo 2019",
+    "year": 2019,
+    "km": 73463,
+    "price": 82900,
+    "transmission": "Automático",
+    "fuel": "Flex",
+    "color": "Cinza",
+    "segment": "Hatch",
+    "badges": ["destaque"],
+    "photos": [
+      "/showcase/vehicle-6-1.webp",
+      "/showcase/vehicle-6-2.webp",
+      "/showcase/vehicle-6-3.webp",
+      "/showcase/vehicle-6-4.webp"
+    ]
+  },
+  {
+    "id": "showcase-7",
+    "slug": "apex-7",
+    "brand": "Toyota",
+    "model": "Corolla Corolla XEi 2.0 Flex 16V Aut.",
+    "title": "Toyota Corolla 2016",
+    "year": 2016,
+    "km": 152448,
+    "price": 89900,
+    "transmission": "Automático",
+    "fuel": "Flex",
+    "color": "Branco",
+    "segment": "Sedã",
+    "badges": ["novo"],
+    "photos": [
+      "/showcase/vehicle-7-1.webp",
+      "/showcase/vehicle-7-2.webp",
+      "/showcase/vehicle-7-3.webp",
+      "/showcase/vehicle-7-4.webp"
+    ]
+  },
+  {
+    "id": "showcase-8",
+    "slug": "apex-8",
+    "brand": "Renault",
+    "model": "DUSTER DUSTER Iconic 1.6 16V Flex Aut.",
+    "title": "Renault DUSTER 2022",
+    "year": 2022,
+    "km": 68334,
+    "price": 89900,
+    "transmission": "Automático",
+    "fuel": "Flex",
+    "color": "Branco",
+    "segment": "SUV",
+    "badges": ["novo"],
+    "photos": [
+      "/showcase/vehicle-8-1.webp",
+      "/showcase/vehicle-8-2.webp",
+      "/showcase/vehicle-8-3.webp",
+      "/showcase/vehicle-8-4.webp"
+    ]
+  },
+  {
+    "id": "showcase-9",
+    "slug": "apex-9",
+    "brand": "Toyota",
+    "model": "Corolla Corolla GLi Upper 1.8 Flex 16V Aut.",
+    "title": "Toyota Corolla 2018",
+    "year": 2018,
+    "km": 165866,
+    "price": 89900,
+    "transmission": "Automático",
+    "fuel": "Flex",
+    "color": "Branco",
+    "power": "139 cv",
+    "segment": "Sedã",
+    "badges": ["novo"],
+    "photos": [
+      "/showcase/vehicle-9-1.webp",
+      "/showcase/vehicle-9-2.webp",
+      "/showcase/vehicle-9-3.webp",
+      "/showcase/vehicle-9-4.webp"
+    ]
+  },
+  {
+    "id": "showcase-10",
+    "slug": "apex-10",
+    "brand": "Volkswagen",
+    "model": "VIRTUS VIRTUS 1.6 MSI Flex 16V 4p Aut.",
+    "title": "Volkswagen VIRTUS 2022",
+    "year": 2022,
+    "km": 71563,
+    "price": 89900,
+    "transmission": "Automático",
+    "fuel": "Flex",
+    "color": "Branco",
+    "power": "117 cv",
+    "segment": "Sedã",
+    "badges": ["novo"],
+    "photos": [
+      "/showcase/vehicle-10-1.webp",
+      "/showcase/vehicle-10-2.webp",
+      "/showcase/vehicle-10-3.webp",
+      "/showcase/vehicle-10-4.webp"
+    ]
+  },
+  {
+    "id": "showcase-11",
+    "slug": "apex-11",
+    "brand": "Volkswagen",
+    "model": "T-Cross T-Cross 200 TSI 1.0  Flex 12V 5p Aut.",
+    "title": "Volkswagen T-Cross 2021",
+    "year": 2021,
+    "km": 49311,
+    "price": 94900,
+    "transmission": "Automático",
+    "fuel": "Flex",
+    "color": "Branco",
+    "segment": "SUV",
+    "badges": ["novo"],
+    "photos": [
+      "/showcase/vehicle-11-1.webp",
+      "/showcase/vehicle-11-2.webp",
+      "/showcase/vehicle-11-3.webp",
+      "/showcase/vehicle-11-4.webp"
+    ]
+  },
+  {
+    "id": "showcase-12",
+    "slug": "apex-12",
+    "brand": "Volkswagen",
+    "model": "SAVEIRO CD CROSS MPI",
+    "title": "Volkswagen SAVEIRO CD CROSS MPI 2023",
+    "year": 2023,
+    "km": 25902,
+    "price": 99900,
+    "transmission": "Manual",
+    "fuel": "Flex",
+    "color": "Azul",
+    "segment": "Picapes",
+    "badges": ["novo"],
+    "photos": [
+      "/showcase/vehicle-12-1.webp",
+      "/showcase/vehicle-12-2.webp",
+      "/showcase/vehicle-12-3.webp",
+      "/showcase/vehicle-12-4.webp"
+    ]
+  }
+]

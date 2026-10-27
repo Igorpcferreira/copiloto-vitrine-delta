@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-label="Foto do veículo">
+  <rect width="800" height="500" fill="#eef1f5"/>
+  <g fill="#c7cfdb">
+    <path d="M180 300c0-14 10-24 24-24h30l40-52c8-10 20-16 33-16h186c13 0 26 6 34 17l38 51h30c14 0 24 10 24 24v40c0 8-6 14-14 14h-24a44 44 0 0 1-88 0H306a44 44 0 0 1-88 0h-24c-8 0-14-6-14-14z"/>
+  </g>
+  <circle cx="306" cy="354" r="22" fill="#aab4c4"/>
+  <circle cx="562" cy="354" r="22" fill="#aab4c4"/>
+  <text x="400" y="440" font-family="system-ui,sans-serif" font-size="20" fill="#9aa6b8" text-anchor="middle">Foto do veículo</text>
+</svg>

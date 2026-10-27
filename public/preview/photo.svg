@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-label="Foto da loja">
+  <rect width="800" height="500" fill="#e9edf3"/>
+  <g fill="#c7cfdb">
+    <circle cx="280" cy="200" r="52"/>
+    <path d="M120 420l150-170 110 120 90-80 210 130z"/>
+  </g>
+  <text x="400" y="470" font-family="system-ui,sans-serif" font-size="20" fill="#9aa6b8" text-anchor="middle">Foto da loja</text>
+</svg>
