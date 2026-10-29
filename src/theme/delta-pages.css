@@ -1233,6 +1233,15 @@
   body:has(.dl-veiculo__barra) .dl-consentimento {
     bottom: 92px;
   }
+  /* Com o aviso aberto sobre a barra, a base do rodapé sobe acima dos dois. */
+  body:has(.dl-veiculo__barra):has(.dl-consentimento) .dl-rod {
+    padding-bottom: 330px;
+  }
+}
+@media (max-width: 639px) {
+  body:has(.dl-veiculo__barra):has(.dl-consentimento) .dl-rod {
+    padding-bottom: 400px;
+  }
 }
 @media (max-width: 599px) {
   .dl-veiculo__resumo,

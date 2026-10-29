@@ -29,7 +29,7 @@ async function quadrosParado(page) {
   const browser = await chromium.launch({ ignoreDefaultArgs: ['--hide-scrollbars'] });
   for (const caminho of PAGINAS) {
     const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
-    await page.addInitScript(() => localStorage.setItem('vitrine-consent', 'denied'));
+    await page.addInitScript(() => (document.cookie = 'vitrine_consent=' + encodeURIComponent(JSON.stringify({ version: 1, analytics: false, marketing: false, map: false, updatedAt: new Date().toISOString() })) + '; Path=/; SameSite=Lax'));
     await page.goto(BASE + caminho, { waitUntil: 'networkidle', timeout: 90000 });
     await page.waitForTimeout(3500);
     await page.mouse.move(2, 2);

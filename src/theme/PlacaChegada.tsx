@@ -5,6 +5,7 @@ import { useConsent } from "@/lib/consent";
 import type { TenantConfig } from "@/lib/types";
 import { CarIcon, CheckIcon, ClockIcon, MailIcon, MapaIcon, PhoneIcon, PinIcon, WhatsAppIcon } from "./base/icones";
 import { externo, mapaEmbed, telefone, zap } from "./base/util";
+import { MAP_NEEDS_CONSENT } from "./consent-choice";
 import MapFrame from "./MapFrame";
 
 const MODOS = [
@@ -24,8 +25,9 @@ const rota = (config: TenantConfig, modo: string) =>
  * mapa e metade fora, na base dele, com o endereço, "Copiar endereço" (avisa que copiou) e
  * "Como você vem?" com De carro, A pé e De transporte, que abrem a rota no Google Maps no modo
  * escolhido. Ao lado, horário e canais. O mapa segue o consentimento de cookies do Horizon
- * (26/10/2026): com o aceite ele aparece sozinho, perto da tela; antes, um desenho de ruas com
- * "Mostrar o mapa".
+ * (26 e 27/10/2026): com a categoria Mapa aceita ele aparece sozinho, perto da tela; antes, um
+ * desenho de ruas com "Mostrar o mapa", que vale só para a visita. O pedido só aparece depois
+ * que a escolha é lida, para quem já aceitou não ver o botão piscar.
  */
 export default function PlacaChegada({
   config,
@@ -42,7 +44,7 @@ export default function PlacaChegada({
   const consentimento = useConsent();
   const [abriu, setAbriu] = useState(false);
   const [copiou, setCopiou] = useState(false);
-  const mostrarMapa = consentimento === "granted" || abriu;
+  const mostrarMapa = !MAP_NEEDS_CONSENT || Boolean(consentimento?.map) || abriu;
   const tel = telefone(config);
   const zapHref = zap(config);
 
@@ -73,11 +75,15 @@ export default function PlacaChegada({
                 <span className="dl-chegada__alfinete" aria-hidden="true">
                   <PinIcon size={20} />
                 </span>
-                <p>O mapa do Google usa cookies.</p>
-                <button type="button" className="dl-btn dl-btn--claro" onClick={() => setAbriu(true)}>
-                  <MapaIcon size={18} />
-                  Mostrar o mapa
-                </button>
+                {consentimento !== undefined && (
+                  <>
+                    <p>O mapa usa cookies do Google.</p>
+                    <button type="button" className="dl-btn dl-btn--claro" onClick={() => setAbriu(true)}>
+                      <MapaIcon size={18} />
+                      Mostrar o mapa
+                    </button>
+                  </>
+                )}
               </div>
             )}
           </div>

@@ -13,7 +13,7 @@ fs.mkdirSync(out, { recursive: true });
     try {
       for (const width of engine === 'chromium' ? [320, 360, 390, 768, 1024, 1440] : [320, 390, 1440]) {
         const context = await browser.newContext({ viewport: { width, height: 900 }, reducedMotion: 'reduce' });
-        await context.addInitScript(() => localStorage.setItem('vitrine-consent', 'denied'));
+        await context.addInitScript(() => (document.cookie = 'vitrine_consent=' + encodeURIComponent(JSON.stringify({ version: 1, analytics: false, marketing: false, map: false, updatedAt: new Date().toISOString() })) + '; Path=/; SameSite=Lax'));
         const page = await context.newPage();
         const errors = [];
         page.on('pageerror', e => errors.push(e.message));

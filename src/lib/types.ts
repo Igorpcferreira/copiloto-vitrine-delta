@@ -62,6 +62,7 @@ export interface TenantConfig {
   vehicleFocus?: VehicleFocus;
   tagline?: string;
   logoUrl?: string;
+  footerLogoTone?: "light" | "dark";
   bannerUrl?: string;
   ogImageUrl?: string;
   bannerLink?: string;

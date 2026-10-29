@@ -5,6 +5,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import { m } from "motion/react";
 import type { TenantConfig } from "@/lib/types";
+import { normalizeAppearance } from "@/lib/appearance";
+import { hasContrast, raisedSurface } from "@/lib/brand-vars";
 import Dialogo from "./base/Dialogo";
 import { ArrowRightIcon, ClockIcon, MailIcon, MenuIcon, PhoneIcon, SearchIcon, WhatsAppIcon, XIcon } from "./base/icones";
 import LogoLoja from "./base/LogoLoja";
@@ -12,6 +14,28 @@ import { externo, inicio, telefone, zap } from "./base/util";
 
 /** Mola das placas: andam juntas quando se fundem na aba e quando voltam aos cantos. */
 const MOLA = { type: "spring", stiffness: 380, damping: 38, mass: 0.9 } as const;
+
+/** Tom das placas sobre o vídeo: a cor principal a 52% sobre a abertura escura. */
+function vidroDoVideo(primaria?: string) {
+  const hex = primaria && /^#[\da-f]{6}$/i.test(primaria) ? primaria : "#0f1522";
+  return `#${[1, 3, 5].map((i) => Math.round(parseInt(hex.slice(i, i + 2), 16) * 0.52).toString(16).padStart(2, "0")).join("")}`;
+}
+
+/**
+ * Onde a cor do header da loja não se lê (4,5:1) no vidro atrás dela, vale a tinta do tema
+ * (Horizon, 28/10/2026, em que a cor clara do header cede nos fundos claros): nas placas claras,
+ * a tinta da marca; sobre o vídeo, o branco. O header sólido é conferido contra o próprio fundo
+ * em `buildAppearanceVars`.
+ */
+function tintaDoCabecalho(config: TenantConfig) {
+  const appearance = normalizeAppearance(config.appearance);
+  const cor = appearance.headerStyle === "solid" ? undefined : appearance.headerTextColor;
+  if (!cor) return {};
+  return {
+    "data-ink-light": hasContrast(cor, raisedSurface(config.surfaceColor)) ? undefined : "theme",
+    "data-ink-dark": hasContrast(cor, vidroDoVideo(config.primaryColor)) ? undefined : "theme",
+  };
+}
 
 /**
  * Header do Delta: placas presas na borda de cima. No topo da página, três placas: o logo no
@@ -86,6 +110,7 @@ export default function Cabecalho({ config, base }: { config: TenantConfig; base
         data-estado={estado}
         data-tom={tom}
         data-estilo={config.appearance?.headerStyle ?? "glass"}
+        {...tintaDoCabecalho(config)}
       >
         <div className="dl-cab__barra">
           <m.div layout="position" transition={MOLA} className="dl-cab__placa dl-cab__placa--logo">

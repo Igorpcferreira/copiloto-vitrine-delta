@@ -7,12 +7,12 @@ export default function ConsentMap({ src, title, className = "" }: { src: string
   const consent = useConsent();
   const [opened, setOpened] = useState(false);
 
-  if (consent === "granted" || opened) {
+  if (consent?.map || opened) {
     return <iframe title={title} src={src} className={className} loading="lazy" referrerPolicy="strict-origin-when-cross-origin" />;
   }
 
   return (
-    <div className={`grid place-items-center bg-surface text-center ${className}`}>
+    <div className={`grid place-items-center bg-surface-soft text-center ${className}`}>
       <div className="flex flex-col items-center gap-3 px-6">
         <p className="text-[14px] text-muted">O mapa usa cookies do Google.</p>
         <button

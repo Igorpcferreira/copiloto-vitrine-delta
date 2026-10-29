@@ -11,7 +11,7 @@ const out = path.join(__dirname, '..', 'docs', 'previews', 'redesign-2026-10-26'
 fs.mkdirSync(out, { recursive: true });
 const report = { matrix: [], interactions: [] };
 const pass = (name) => { report.interactions.push(name); console.log(`PASS ${name}`); };
-const sem = () => localStorage.setItem('vitrine-consent', 'denied');
+const sem = () => (document.cookie = 'vitrine_consent=' + encodeURIComponent(JSON.stringify({ version: 1, analytics: false, marketing: false, map: false, updatedAt: new Date().toISOString() })) + '; Path=/; SameSite=Lax');
 
 async function settle(page, height) {
   const max = await page.evaluate(() => document.documentElement.scrollHeight);

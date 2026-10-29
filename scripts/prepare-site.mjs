@@ -124,6 +124,34 @@ async function toWebp(url, name, maxWidth, { critical = false } = {}) {
   }
 }
 
+const FAVICON_ICO_SIZES = [16, 32, 48, 96];
+
+async function writeFaviconIco(source) {
+  if (!source) return;
+  try {
+    const buffer = await readAsset(source);
+    const images = await Promise.all(FAVICON_ICO_SIZES.map((size) =>
+      imageInput(buffer).rotate().resize(size, size, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } }).png().toBuffer()));
+    const header = Buffer.alloc(6 + 16 * images.length);
+    header.writeUInt16LE(1, 2);
+    header.writeUInt16LE(images.length, 4);
+    let offset = header.length;
+    images.forEach((png, i) => {
+      const entry = 6 + 16 * i;
+      header.writeUInt8(FAVICON_ICO_SIZES[i], entry);
+      header.writeUInt8(FAVICON_ICO_SIZES[i], entry + 1);
+      header.writeUInt16LE(1, entry + 4);
+      header.writeUInt16LE(32, entry + 6);
+      header.writeUInt32LE(png.length, entry + 8);
+      header.writeUInt32LE(offset, entry + 12);
+      offset += png.length;
+    });
+    await writeFile(path.join(publicDir, "favicon.ico"), Buffer.concat([header, ...images]));
+  } catch (err) {
+    console.warn(`[prepare-site] Falha ao gerar favicon.ico: ${err.message}; mantendo o padrão.`);
+  }
+}
+
 async function toOgJpeg(source) {
   if (!source) return undefined;
   try {
@@ -133,6 +161,48 @@ async function toOgJpeg(source) {
   } catch (err) {
     if (Buffer.isBuffer(source)) throw new Error("Falha ao gerar a imagem de compartilhamento do vídeo.", { cause: err });
     console.warn(`[prepare-site] Falha ao gerar og-image: ${err.message}.`);
+    return undefined;
+  }
+}
+
+// Tom do logo no rodapé (Horizon, 28/10/2026), medido contra o fundo em que o logo aparece
+// no rodapé de cada tema: no Horizon, a superfície; no Delta, a placa clara (`--dl-raised`).
+const DEFAULT_SURFACE = "#fafafa";
+const LOGO_MIN_CONTRAST = 3;
+const LIGHT_LUMINANCE = 0.1791;
+
+const channelLuminance = (value) => {
+  const c = value / 255;
+  return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+};
+const luminance = (r, g, b) => 0.2126 * channelLuminance(r) + 0.7152 * channelLuminance(g) + 0.0722 * channelLuminance(b);
+const contrast = (a, b) => (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+
+/** A placa do logo: branca nas superfícies claras e um degrau acima delas nas escuras (`raisedSurface`). */
+function footerLogoBackground(surfaceColor) {
+  const hex = parseInt(surfaceColor.slice(1), 16);
+  const channels = [(hex >> 16) & 255, (hex >> 8) & 255, hex & 255];
+  if (luminance(...channels) > LIGHT_LUMINANCE) return "#ffffff";
+  return `#${channels.map((c) => Math.round(c + (255 - c) * 0.08).toString(16).padStart(2, "0")).join("")}`;
+}
+
+async function footerLogoTone(url, surfaceColor) {
+  if (!url) return undefined;
+  try {
+    const { data } = await imageInput(await readAsset(url)).resize({ width: 160, withoutEnlargement: true }).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+    const hex = parseInt(surfaceColor.slice(1), 16);
+    const surface = luminance((hex >> 16) & 255, (hex >> 8) & 255, hex & 255);
+    let visible = 0;
+    let hidden = 0;
+    for (let i = 0; i < data.length; i += 4) {
+      if (data[i + 3] < 128) continue;
+      visible++;
+      if (contrast(luminance(data[i], data[i + 1], data[i + 2]), surface) < LOGO_MIN_CONTRAST) hidden++;
+    }
+    if (!visible || hidden / visible < 0.5) return undefined;
+    return surface > LIGHT_LUMINANCE ? "dark" : "light";
+  } catch (err) {
+    console.warn(`[prepare-site] Falha ao medir o contraste do logo: ${err.message}.`);
     return undefined;
   }
 }
@@ -176,6 +246,8 @@ try {
   const frame = appearance.bannerType === "video" ? await firstVideoFrame(appearance.bannerVideoUrl) : undefined;
   const ogSource = frame ?? config.bannerUrl ?? config.storePhotos?.[0] ?? config.logoUrl;
   config.ogImageUrl = await toOgJpeg(ogSource);
+  await writeFaviconIco(config.faviconUrl ?? config.logoUrl);
+  config.footerLogoTone = await footerLogoTone(config.logoUrl, footerLogoBackground(config.surfaceColor ?? DEFAULT_SURFACE));
   config.logoUrl = await toWebp(config.logoUrl, "logo", 600, { critical: true });
   config.faviconUrl = await toWebp(config.faviconUrl, "favicon", 128, { critical: true });
   config.bannerUrl = await toWebp(frame ?? config.bannerUrl, "banner", 2400, { critical: true });

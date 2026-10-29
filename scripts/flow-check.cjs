@@ -12,7 +12,7 @@ const { chromium } = require('playwright');
   const origem = new URL(base).origin;
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
-  await context.addInitScript(() => localStorage.setItem('vitrine-consent', 'denied'));
+  await context.addInitScript(() => (document.cookie = 'vitrine_consent=' + encodeURIComponent(JSON.stringify({ version: 1, analytics: false, marketing: false, map: false, updatedAt: new Date().toISOString() })) + '; Path=/; SameSite=Lax'));
   const page = await context.newPage();
   page.setDefaultTimeout(20000);
   const fora = [];

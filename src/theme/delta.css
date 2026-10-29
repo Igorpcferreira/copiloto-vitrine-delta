@@ -6,12 +6,14 @@
 /* Tokens --------------------------------------------------------------------------------- */
 .dl {
   --dl-bg: var(--color-surface, #fafafa);
-  --dl-ink: var(--site-text, var(--color-on-surface, #0f1522));
+  /* `--surface-text` only exists when the store text colour cannot be read on the surface. */
+  --dl-ink: var(--surface-text, var(--site-text, var(--color-on-surface, #0f1522)));
   --dl-raised: var(--color-surface-raised, #ffffff);
   --dl-primary: var(--color-navy-950, #0f1522);
   --dl-primary-2: var(--color-navy-900, #1b263a);
-  --dl-on-primary: var(--contrast-text, var(--color-on-navy, #ffffff));
-  --dl-brand-ink: var(--site-text, var(--color-surface-ink, var(--dl-primary)));
+  /* O texto de contraste da loja só chega a `--color-on-navy` quando se lê na cor principal (Horizon, 28/10). */
+  --dl-on-primary: var(--color-on-navy, #ffffff);
+  --dl-brand-ink: var(--surface-text, var(--site-text, var(--color-surface-ink, var(--dl-primary))));
   --dl-accent: var(--color-brand-red, #528fb8);
   --dl-accent-ink: var(--color-brand-ink, #3c6e91);
   --dl-action: var(--apex-action-bg, #3a6a8c);
@@ -472,6 +474,15 @@
 .dl-cab[data-tom="video"] .dl-cab__placa--logo {
   --dl-cab-fundo: var(--header-bg, color-mix(in srgb, var(--dl-raised) 94%, transparent));
   --dl-cab-texto: var(--header-text, var(--header-default-text, var(--dl-brand-ink)));
+}
+/* A cor do header da loja fica só onde se lê (4,5:1) na placa atrás dela: nas placas claras vale
+   a tinta da marca; sobre o vídeo, o branco (Horizon 28/10/2026). */
+.dl-cab[data-ink-light="theme"]:not([data-tom="video"]),
+.dl-cab[data-ink-light="theme"][data-tom="video"] .dl-cab__placa--logo {
+  --dl-cab-texto: var(--dl-brand-ink);
+}
+.dl-cab[data-ink-dark="theme"][data-tom="video"] {
+  --dl-cab-texto: #ffffff;
 }
 .dl-cab[data-estilo="solid"] {
   --dl-cab-fundo: var(--header-bg, var(--dl-raised));
@@ -1110,7 +1121,7 @@
   z-index: 85;
   display: grid;
   gap: 12px;
-  width: min(420px, calc(100vw - 112px));
+  width: min(500px, calc(100vw - 112px));
   padding: 16px 18px;
   border-radius: 4px;
   border: 1px solid var(--dl-line);
@@ -1120,34 +1131,214 @@
   box-shadow: var(--dl-shadow);
 }
 .dl-consentimento__texto {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
   margin: 0;
   font-size: 14px;
   line-height: 1.5;
 }
+.dl-consentimento__icone {
+  flex: none;
+  margin-top: 1px;
+  color: var(--dl-accent-ink);
+}
 .dl-consentimento__texto a {
+  font-weight: 700;
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 .dl-consentimento__acoes {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
+}
+.dl-consentimento__acoes .dl-btn--escuro {
+  margin-left: auto;
 }
 /* Enquanto o aviso está aberto, o rodapé ganha espaço embaixo para o cartão não cobrir a base. */
 body:has(.dl-consentimento) .dl-rod {
   padding-bottom: 200px;
 }
+/* No celular, o cartão ocupa a largura acima do WhatsApp (nunca sobre ele), como no Halo. */
 @media (max-width: 639px) {
   .dl-consentimento {
     left: 12px;
-    bottom: 12px;
-    width: calc(100vw - 104px);
+    right: 12px;
+    bottom: calc(88px + env(safe-area-inset-bottom));
+    width: auto;
     padding: 14px;
   }
-  .dl-consentimento__acoes .dl-btn {
-    flex: 1;
+  body:not(:has(.dl-zap)) .dl-consentimento {
+    bottom: calc(12px + env(safe-area-inset-bottom));
+  }
+  .dl-consentimento__acoes {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .dl-consentimento__acoes .dl-consentimento__config {
+    grid-column: 1 / -1;
+  }
+  .dl-consentimento__acoes .dl-btn--escuro {
+    margin-left: 0;
   }
   body:has(.dl-consentimento) .dl-rod {
-    padding-bottom: 260px;
+    padding-bottom: 330px;
+  }
+}
+@media (max-width: 380px) {
+  :is(.dl-consentimento, .dl-cookies) .dl-btn {
+    padding: 4px 10px;
+    line-height: 1.2;
+    white-space: normal;
+    text-align: center;
+  }
+}
+
+/* Preferências de cookies, no diálogo do Delta ------------------------------------------ */
+.dl-cookies {
+  width: min(540px, calc(100% - 24px));
+  max-width: none;
+  max-height: calc(100svh - 24px);
+  margin: auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--dl-ink);
+  overflow: visible;
+}
+.dl-cookies::backdrop {
+  background: color-mix(in srgb, var(--dl-primary) 46%, transparent);
+}
+.dl-cookies__painel {
+  display: grid;
+  gap: 16px;
+  max-height: calc(100svh - 24px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 22px 22px 20px;
+  border-radius: 6px;
+  border: 1px solid var(--dl-line);
+  border-left: 4px solid var(--dl-accent);
+  background: var(--dl-raised);
+  box-shadow: var(--dl-shadow);
+}
+.dl-cookies__topo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.dl-cookies__topo h2 {
+  flex: 1;
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--dl-brand-ink);
+}
+.dl-cookies__fechar {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  margin: -8px -8px -8px 0;
+  border-radius: 6px;
+  color: var(--dl-ink);
+}
+.dl-cookies__fechar:hover {
+  background: var(--dl-soft);
+}
+.dl-cookies__lead,
+.dl-cookies__nota {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--dl-muted);
+}
+.dl-cookies__lista {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--dl-line);
+}
+.dl-cookies__lista li {
+  border-bottom: 1px solid var(--dl-line);
+}
+.dl-cookies__linha {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 64px;
+  padding: 12px 0;
+}
+label.dl-cookies__linha {
+  cursor: pointer;
+}
+.dl-cookies__texto {
+  display: grid;
+  gap: 2px;
+}
+.dl-cookies__lista strong {
+  font-size: 15px;
+  font-weight: 800;
+}
+.dl-cookies__lista small {
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--dl-muted);
+}
+.dl-cookies__lista em {
+  flex: none;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 700;
+  color: var(--dl-accent-ink);
+}
+.dl-cookies__chave {
+  appearance: none;
+  flex: none;
+  position: relative;
+  width: 46px;
+  height: 26px;
+  margin: 0;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--dl-ink) 24%, var(--dl-raised));
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.dl-cookies__chave::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 25%);
+  transition: transform 0.2s var(--dl-ease);
+}
+.dl-cookies__chave:checked {
+  background: var(--dl-action);
+}
+.dl-cookies__chave:checked::after {
+  transform: translateX(20px);
+}
+.dl-cookies__chave:focus-visible {
+  outline: 2px solid var(--dl-accent-ink);
+  outline-offset: 3px;
+}
+.dl-cookies__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .dl-cookies__chave,
+  .dl-cookies__chave::after {
+    transition: none;
   }
 }
 
@@ -1917,6 +2108,30 @@ body:has(.dl-consentimento) .dl-rod {
 }
 .dl-rod__base p {
   margin: 0;
+}
+.dl-rod__legal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 18px;
+}
+.dl-rod__cookies {
+  min-height: 40px;
+  color: inherit;
+  text-decoration: underline dashed;
+  text-decoration-color: color-mix(in srgb, currentColor 50%, transparent);
+  text-underline-offset: 4px;
+}
+.dl-rod__cookies:hover {
+  color: var(--dl-on-primary);
+  text-decoration-color: currentColor;
+}
+/* Logo que some na placa, medido no prebuild (`footerLogoTone`, Horizon 28/10/2026). */
+.dl-rod__placa[data-tone="dark"] .dl-rod__logo img {
+  filter: brightness(0);
+}
+.dl-rod__placa[data-tone="light"] .dl-rod__logo img {
+  filter: brightness(0) invert(1);
 }
 .dl-rod__subir {
   order: -1;

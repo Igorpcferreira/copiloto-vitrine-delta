@@ -153,6 +153,7 @@ export function demoPage(
       (!filters.color || v.color === filters.color) &&
       (!filters.segment || v.segment === filters.segment) &&
       (!filters.vehicleType || (v.vehicleType ?? "car") === filters.vehicleType) &&
+      (!filters.badge || v.badges.includes(filters.badge)) &&
       (filters.yearMin === undefined || v.year >= filters.yearMin) &&
       (filters.priceMin === undefined || v.price >= filters.priceMin) &&
       (filters.priceMax === undefined || v.price <= filters.priceMax) &&

@@ -63,7 +63,7 @@ function PreviewContent() {
   const { Shell, Home, Comprar, Vender, SobreNos } = theme;
 
   const brandVars = useMemo(
-    () => ({ ...buildBrandVars(config.primaryColor, config.secondaryColor, config.surfaceColor), ...buildAppearanceVars(config.appearance) }) as Record<string, string>,
+    () => ({ ...buildBrandVars(config.primaryColor, config.secondaryColor, config.surfaceColor, config.appearance?.textColor), ...buildAppearanceVars(config.appearance, { primaryColor: config.primaryColor }) }) as Record<string, string>,
     [config.primaryColor, config.secondaryColor, config.surfaceColor, config.appearance],
   );
   const fontFamily = resolveFontFamily(config.fontFamily);

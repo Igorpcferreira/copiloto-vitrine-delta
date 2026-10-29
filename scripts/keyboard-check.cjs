@@ -9,7 +9,7 @@ const { chromium } = require('playwright');
   const base = process.env.VITRINE_BASE_URL || process.env.HALO_BASE_URL || 'http://localhost:3601';
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
-  await context.addInitScript(() => localStorage.setItem('vitrine-consent', 'denied'));
+  await context.addInitScript(() => (document.cookie = 'vitrine_consent=' + encodeURIComponent(JSON.stringify({ version: 1, analytics: false, marketing: false, map: false, updatedAt: new Date().toISOString() })) + '; Path=/; SameSite=Lax'));
   const desktop = await context.newPage();
   await desktop.goto(base, { waitUntil: 'networkidle' });
   await desktop.keyboard.press('Tab');
@@ -45,7 +45,7 @@ const { chromium } = require('playwright');
   console.log('desktop: navegação, página atual e destinos de contato: passed');
 
   const mobileContext = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
-  await mobileContext.addInitScript(() => localStorage.setItem('vitrine-consent', 'denied'));
+  await mobileContext.addInitScript(() => (document.cookie = 'vitrine_consent=' + encodeURIComponent(JSON.stringify({ version: 1, analytics: false, marketing: false, map: false, updatedAt: new Date().toISOString() })) + '; Path=/; SameSite=Lax'));
   const mobile = await mobileContext.newPage();
   await mobile.goto(base + '/comprar', { waitUntil: 'networkidle' });
   const menu = mobile.getByRole('button', { name: 'Abrir menu' });

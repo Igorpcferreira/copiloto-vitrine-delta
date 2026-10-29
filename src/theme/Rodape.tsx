@@ -1,4 +1,5 @@
 import Link from "next/link";
+import CookieSettingsButton from "@/components/CookieSettingsButton";
 import CopilotoLogo from "@/components/CopilotoLogo";
 import { DEFAULT_STOCK_NOUN, possessive, type StockNoun } from "@/lib/stock-noun";
 import type { TenantConfig } from "@/lib/types";
@@ -6,6 +7,7 @@ import { ArrowUpIcon, ClockIcon, FacebookIcon, InstagramIcon, MailIcon, PhoneIco
 import LogoLoja from "./base/LogoLoja";
 import { ANO, externo, inicio, telefone, zap } from "./base/util";
 import BuscaRodape from "./BuscaRodape";
+import { consentCategoriesFor } from "./consent-choice";
 import Topo from "./Topo";
 
 /**
@@ -13,10 +15,13 @@ import Topo from "./Topo";
  * esquerda, "A próxima direção é sua.", "Vamos conversar?" e "Fale com a gente" (do lado oposto
  * ao botão da fita, para as duas chamadas não ficarem uma em cima da outra); à direita, um campo
  * de busca do estoque. No meio, Explore, Contato e Acompanhe (este só com links do painel) e a
- * placa do logo. Na base, copyright, crédito em branco e "Voltar ao topo" numa lâmina que desliza.
+ * placa do logo (com o tom medido no prebuild, `footerLogoTone`, quando o logo some na placa). Na
+ * base, copyright, "Configurar cookies" (Horizon, 27/10/2026; só no site, onde fica o aviso, e não
+ * no preview do painel), crédito em branco e "Voltar ao topo" numa lâmina que desliza.
  * Textos da regra 12 do SKILL.md.
  */
 export default function Rodape({ config, base, noun = DEFAULT_STOCK_NOUN }: { config: TenantConfig; base: string; noun?: StockNoun }) {
+  const cookieSettings = base === "" && consentCategoriesFor(config).length > 0;
   const zapHref = zap(config);
   const tel = telefone(config);
   const fale = zapHref ?? tel ?? (config.email ? `mailto:${config.email}` : undefined);
@@ -55,7 +60,12 @@ export default function Rodape({ config, base, noun = DEFAULT_STOCK_NOUN }: { co
         </div>
 
         <div className="dl-rod__meio">
-          <Link href={inicio(base)} className="dl-rod__placa" aria-label={`${config.name}, página inicial`}>
+          <Link
+            href={inicio(base)}
+            className="dl-rod__placa"
+            data-tone={config.footerLogoTone}
+            aria-label={`${config.name}, página inicial`}
+          >
             <LogoLoja nome={config.name} logoUrl={config.logoUrl} className="dl-rod__logo" altura={32} />
           </Link>
           <nav className="dl-rod__col" aria-labelledby="dl-rod-explore">
@@ -140,7 +150,10 @@ export default function Rodape({ config, base, noun = DEFAULT_STOCK_NOUN }: { co
         </div>
 
         <div className="dl-rod__base">
-          <p>© Copyright {ANO}. Copiloto Inova Simples (I.s.)</p>
+          <div className="dl-rod__legal">
+            <p>© Copyright {ANO}. Copiloto Inova Simples (I.s.)</p>
+            {cookieSettings && <CookieSettingsButton className="dl-rod__cookies" />}
+          </div>
           <a className="dl-rod__credito" href="https://ocopiloto.com.br/" {...externo}>
             Desenvolvida com <span aria-hidden="true">♥</span>
             <span className="dl-sr">amor</span> por <CopilotoLogo className="dl-rod__copiloto" />

@@ -2,7 +2,8 @@
 
 @theme inline {
   --font-sans: var(--font-hanken);
-  --font-display: var(--font-store, var(--font-hanken));
+  --font-display: var(--font-store, var(--font-michroma));
+  --font-display-alt: var(--font-store, var(--font-orbitron));
 }
 
 @theme {
@@ -162,8 +163,12 @@ body {
 @theme inline {
   --color-content: var(--site-text, var(--color-navy-950));
   --color-subtle: var(--site-text, var(--color-muted));
+  --color-surface-content: var(--surface-text, var(--site-text, var(--color-navy-950)));
+  --color-surface-foreground: var(--surface-text, var(--color-on-surface));
+  --color-surface-soft: var(--surface-soft, var(--color-surface));
+  --color-surface-line: var(--surface-line, var(--color-line));
   --color-contrast: var(--contrast-text, #ffffff);
-  --color-header: var(--header-text, var(--header-default-text, var(--color-navy-950)));
+  --color-header: var(--header-tone-text, var(--header-text, var(--header-default-text, var(--color-navy-950))));
   --color-reviews-text: var(--contrast-text, var(--color-on-navy));
   --color-reviews-muted: var(--contrast-text, #c5c9d0);
 }
@@ -173,6 +178,7 @@ body {
 }
 .site-header[data-style="transparent"] { background: transparent; backdrop-filter: none; }
 .site-header[data-style="solid"] { background: var(--header-bg, #ffffff); backdrop-filter: none; }
+.site-header[data-tone="light"] { --header-tone-text: var(--header-light-text); }
 .header-drawer { background: var(--drawer-bg, var(--header-bg, #ffffff)); color: var(--header-text, var(--header-default-text, var(--color-navy-950))); }
 .hero-media { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
 .hero-media img, .hero-media video {
@@ -183,6 +189,6 @@ body {
 .reviews-area { background: var(--color-navy-950); }
 .reviews-card { background: var(--color-navy-card); }
 
-.header-logo span { color: var(--header-text, var(--header-default-text, var(--color-navy-950))); }
+.header-logo span { color: var(--header-tone-text, var(--header-text, var(--header-default-text, var(--color-navy-950)))); }
 
 .header-drawer .drawer-active, .header-drawer button:hover { background: color-mix(in srgb, currentColor 10%, transparent); }

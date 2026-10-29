@@ -79,10 +79,11 @@ A loja controla as cores, a fonte, o banner (imagem ou vídeo), o estilo do head
 - O header é feito de placas no topo. Com 56 px de rolagem elas viram uma aba só; abaixo de lg o menu vira cortina.
 - A paleta da loja vale para todos os componentes. Campos e botões têm cantos leves de 6 px; lâminas e placas inclinadas fazem a identidade do tema.
 - O texto das faixas na cor da loja e do rodapé é calculado pelo contraste com essa cor.
+- As cores de texto e do header escolhidas no painel só entram onde se leem: nas placas claras vale a tinta da marca e, sobre o vídeo, o branco. O logo do rodapé ganha um tom legível quando some na placa (medido no build).
 
 ## Privacidade e segurança
 
-- O aviso de cookies segue a LGPD. Google Analytics, Meta Pixel e o mapa do Google só carregam depois do consentimento; o mapa também abre pelo botão Mostrar o mapa.
+- O aviso de cookies segue a LGPD. Google Analytics, Google Ads, Meta Pixel e o mapa do Google só carregam depois do consentimento; o mapa também abre pelo botão Mostrar o mapa, e a escolha pode ser revista em "Configurar cookies", no rodapé.
 - `CLIENT_API_TOKEN` é a chave pública da vitrine. Ela só lê os dados que a vitrine já mostra e só envia leads e propostas.
 - Todas as páginas têm cabeçalhos de segurança. Outro domínio não consegue embutir o site.
 - A rota `/preview` só aceita mensagens e iframes de `*.ocopiloto.com.br` e de `localhost`.
@@ -154,11 +155,9 @@ ui-spec-sheet.pdf          Desenho técnico de cada página do tema
 - A branch `main` é a versão de produção. Com o tema cadastrado no painel, cada loja recebe o código novo no próximo deploy dela.
 - Antes de mesclar, rode `npm run lint` e `npm run build:demo`, e `npm run build` com a configuração de uma loja real.
 - Uma mudança visual vale para todas as lojas deste tema. Teste com uma loja de fundo claro e com uma de fundo escuro.
+- Sem `vercel.json`, como no Horizon: a Vercel reconhece o Next.js e roda `npm run build`, com o prebuild da loja.
 
-> [!IMPORTANT]
-> O `vercel.json` deste repositório publica a demonstração (`npm run build:demo`). Antes de ligar o tema às lojas, troque o comando de build para `npm run build` ou retire o arquivo, como no Horizon.
-
-Situação em 29/10/2026: revisão visual de 28/10 entregue; a escolha das categorias continua aberta. O tema segue o contrato do Horizon de 26/10; faltam as mudanças de aparência de 28/10. Também falta cadastrar o tema no painel e homologar com a API real.
+Situação em 29/10/2026: revisão visual de 28/10 entregue; a escolha das categorias continua aberta. O tema segue o contrato do Horizon até 28/10 (`f50dcd4`), conferido com uma API falsa nos mesmos endereços. Falta cadastrar o tema no painel e homologar com a API real.
 
 ## Licença
 

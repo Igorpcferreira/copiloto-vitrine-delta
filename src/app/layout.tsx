@@ -91,14 +91,14 @@ export default async function RootLayout({
 }>) {
   const config = await getTenant();
   const dealer = await dealerJsonLd();
-  const brandVars = buildBrandVars(config.primaryColor, config.secondaryColor, config.surfaceColor);
+  const brandVars = buildBrandVars(config.primaryColor, config.secondaryColor, config.surfaceColor, config.appearance?.textColor);
   const fontFamily = resolveFontFamily(config.fontFamily);
 
   return (
     <html
       lang="pt-BR"
       className={`${hanken.variable} ${fontVariables} h-full antialiased`}
-      style={{ ...brandVars, ...buildAppearanceVars(config.appearance) }}
+      style={{ ...brandVars, ...buildAppearanceVars(config.appearance, config) }}
       suppressHydrationWarning
     >
       <head>

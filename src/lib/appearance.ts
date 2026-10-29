@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { readableForeground } from "./brand-vars";
+import { hasContrast, pageTextColor, readableForeground } from "./brand-vars";
 
 export interface SiteAppearance {
   headerStyle?: "glass" | "transparent" | "solid" | null;
@@ -11,6 +11,13 @@ export interface SiteAppearance {
   bannerType?: "image" | "video" | null;
   bannerVideoUrl?: string | null;
 }
+
+export interface AppearancePalette {
+  primaryColor?: string | null;
+}
+
+const DEFAULT_BRAND = "#0f1522";
+const LIGHT_BACKDROP = "#ffffff";
 
 const colors = {
   headerBackgroundColor: "--header-bg",
@@ -44,31 +51,44 @@ export function normalizeAppearance(value: unknown): SiteAppearance {
   return result as SiteAppearance;
 }
 
-export function buildAppearanceVars(value?: SiteAppearance | null): CSSProperties {
+function validHex(value?: string | null): string | undefined {
+  return value && /^#[\da-f]{6}$/i.test(value) ? value : undefined;
+}
+
+export function buildAppearanceVars(value?: SiteAppearance | null, palette: AppearancePalette = {}): CSSProperties {
   const appearance = normalizeAppearance(value);
+  const brand = validHex(palette.primaryColor) ?? DEFAULT_BRAND;
+  const solidHeader = appearance.headerStyle === "solid";
+  const headerBackground = appearance.headerBackgroundColor ?? LIGHT_BACKDROP;
+  const headerTextColor =
+    appearance.headerTextColor && (!solidHeader || hasContrast(appearance.headerTextColor, headerBackground))
+      ? appearance.headerTextColor
+      : undefined;
   const vars: Record<string, string> = {};
   for (const [key, cssVar] of Object.entries(colors)) {
     const value = appearance[key as keyof SiteAppearance];
-    if (key === "headerBackgroundColor" && appearance.headerStyle !== "solid") continue;
+    if (key === "headerBackgroundColor" && !solidHeader) continue;
+    if (key === "textColor" && !pageTextColor(value)) continue;
+    if (key === "headerTextColor" && !headerTextColor) continue;
     if (typeof value === "string") vars[cssVar] = value;
   }
-  if (appearance.headerStyle === "solid") {
-    const background = appearance.headerBackgroundColor ?? "#ffffff";
-    vars["--header-default-text"] = background.toLowerCase() === "#ffffff" ? "#0f1522" : readableForeground(background);
+  if (solidHeader) {
+    vars["--header-default-text"] = headerBackground.toLowerCase() === LIGHT_BACKDROP ? DEFAULT_BRAND : readableForeground(headerBackground);
   }
-  if (appearance.headerTextColor) {
-    vars["--drawer-bg"] = appearance.headerStyle === "solid"
-      ? appearance.headerBackgroundColor ?? "#ffffff"
-      : readableForeground(appearance.headerTextColor);
+  if (headerTextColor && !solidHeader && !hasContrast(headerTextColor, LIGHT_BACKDROP)) {
+    vars["--header-light-text"] = readableForeground(LIGHT_BACKDROP);
   }
-  if (appearance.textColor) {
-    vars["--color-on-surface"] = appearance.textColor;
-    vars["--color-muted"] = appearance.textColor;
+  if (headerTextColor) {
+    vars["--drawer-bg"] = solidHeader ? headerBackground : readableForeground(headerTextColor);
+  }
+  const textColor = pageTextColor(appearance.textColor);
+  if (textColor) {
+    vars["--color-on-surface"] = textColor;
+    vars["--color-muted"] = textColor;
   }
   if (appearance.contrastTextColor) {
-    for (const key of ["--color-on-navy", "--color-on-brand"]) {
-      vars[key] = appearance.contrastTextColor;
-    }
+    if (hasContrast(appearance.contrastTextColor, brand)) vars["--color-on-navy"] = appearance.contrastTextColor;
+    vars["--color-on-brand"] = appearance.contrastTextColor;
   }
   return vars as CSSProperties;
 }

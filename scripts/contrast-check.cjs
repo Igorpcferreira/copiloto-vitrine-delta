@@ -104,7 +104,7 @@ function medir(seletores) {
   for (const paleta of PALETAS) {
     for (const [pagina, seletores] of Object.entries(PARES)) {
       const context = await browser.newContext({ viewport: { width: 1280, height: 900 }, reducedMotion: 'reduce' });
-      await context.addInitScript(() => localStorage.setItem('vitrine-consent', 'denied'));
+      await context.addInitScript(() => (document.cookie = 'vitrine_consent=' + encodeURIComponent(JSON.stringify({ version: 1, analytics: false, marketing: false, map: false, updatedAt: new Date().toISOString() })) + '; Path=/; SameSite=Lax'));
       const page = await context.newPage();
       page.setDefaultTimeout(15000);
       if (paleta.config) {
