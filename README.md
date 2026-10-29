@@ -1,3 +1,11 @@
+<!-- entrega-equipe-2026-10-28 -->
+# Delta
+
+Código entregue à equipe em [ocopiloto/copiloto-vitrine-delta](https://github.com/ocopiloto/copiloto-vitrine-delta) em 28/10/2026, com o histórico preservado. Consulte [ENTREGA.md](ENTREGA.md) para execução, configuração e limites da entrega.
+
+As referências a publicação e repositório pessoal no registro abaixo descrevem as demos de Igor. Este repositório da organização não foi conectado à Vercel nesta entrega.
+<!-- /entrega-equipe-2026-10-28 -->
+
 # Delta
 
 Repositório `copiloto-vitrine-delta` (https://github.com/Igorpcferreira/copiloto-vitrine-delta), criado pelo usuário em 26/10/2026; primeiro commit e push em `main` em 27/10/2026, com autorização dele. Sem publicação na Vercel por enquanto.
