@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { chromium, webkit } = require('playwright');
 const base = process.env.VITRINE_BASE_URL || 'http://localhost:3601';
-const out = path.join(__dirname, '../docs/previews/revisao-2026-10-28');
+const out = path.join(__dirname, '../tmp/qa/revisao-2026-10-28');
 fs.mkdirSync(out, { recursive: true });
 
 (async () => {

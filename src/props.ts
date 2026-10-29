@@ -1,4 +1,4 @@
-import type { ComponentType, ReactNode } from "react";
+import type { ReactNode } from "react";
 import type { TenantConfig, Vehicle, VehicleFilters } from "@/lib/types";
 import type { VehicleFacets } from "@/lib/data";
 import type { StockNoun } from "@/lib/stock-noun";
@@ -7,8 +7,6 @@ export interface ShellProps {
   config: TenantConfig;
   base: string;
   children: ReactNode;
-  /** Closing banner of a prototype option, only on /prototipos; the site renders Finale. */
-  closing?: { Banner: ComponentType<{ config: TenantConfig; base: string }>; carriesLead: boolean };
   noun?: StockNoun;
 }
 
