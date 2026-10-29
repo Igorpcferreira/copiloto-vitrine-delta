@@ -119,7 +119,7 @@ export default function Cabecalho({ config, base }: { config: TenantConfig; base
               ref={botaoBusca}
               type="button"
               className="dl-cab__acao dl-cab__acao--busca"
-              aria-label="Buscar um carro"
+              aria-label={buscando ? "Fechar busca" : "Buscar um carro"}
               aria-expanded={buscando}
               onClick={() => setBuscando((b) => !b)}
             >
@@ -134,7 +134,7 @@ export default function Cabecalho({ config, base }: { config: TenantConfig; base
                 {...(contato.externo ? externo : {})}
               >
                 {whatsapp ? <WhatsAppIcon size={18} /> : <PhoneIcon size={17} />}
-                <span className="dl-cab__acao-texto">Vamos conversar</span>
+                <span className="dl-cab__acao-texto">{buscando && whatsapp ? "WhatsApp" : "Vamos conversar"}</span>
               </a>
             )}
             <button
@@ -257,6 +257,9 @@ function BuscaNaAba({ base, aoFechar }: { base: string; aoFechar: () => void }) 
       />
       <button type="submit" className="dl-busca-aba__ir" aria-label="Buscar no estoque">
         <ArrowRightIcon size={18} />
+      </button>
+      <button type="button" className="dl-busca-aba__fechar" aria-label="Fechar busca" onClick={aoFechar}>
+        <XIcon size={18} />
       </button>
     </form>
   );

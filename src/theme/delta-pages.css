@@ -262,11 +262,11 @@
   background: color-mix(in srgb, var(--dl-accent) 14%, var(--dl-raised));
 }
 .dl-barra__faixas-lista a[aria-current="true"] {
-  color: var(--dl-on-primary);
+  color: var(--dl-on-action);
 }
 .dl-barra__faixas-lista a[aria-current="true"]::before {
-  background: var(--dl-primary);
-  border-color: var(--dl-primary);
+  background: var(--dl-action);
+  border-color: var(--dl-action);
 }
 .dl-site .dl-barra__faixas-lista a:focus-visible {
   outline: none;
@@ -1327,8 +1327,8 @@
   transition: transform 0.55s var(--dl-ease), background-color 0.3s;
 }
 .dl-vender__carro[data-chegou] {
-  background: var(--dl-primary);
-  color: var(--dl-on-primary);
+  background: var(--dl-action);
+  color: var(--dl-on-action);
 }
 .dl-vender__pista {
   display: grid;
@@ -1359,8 +1359,8 @@
   font-weight: 800;
 }
 .dl-vender__etapa[data-estado="feita"] .dl-vender__numero {
-  background: var(--dl-primary);
-  color: var(--dl-on-primary);
+  background: var(--dl-action);
+  color: var(--dl-on-action);
 }
 .dl-vender__nome {
   margin: 0;
@@ -1684,7 +1684,7 @@
   gap: 2px;
   min-width: 168px;
   padding: 14px 38px 15px 32px;
-  color: var(--dl-on-primary);
+  color: var(--dl-tint-ink);
   animation: dl-placa-entra 0.55s var(--dl-ease) both;
   animation-delay: calc(120ms + var(--i, 0) * 90ms);
 }
@@ -1693,7 +1693,7 @@
   position: absolute;
   inset: 0 10px;
   z-index: -1;
-  background: var(--dl-primary);
+  background: var(--dl-tint);
   transform: skewX(-12deg);
 }
 .dl-sobre__numeros li:nth-child(2n)::before {
@@ -1802,14 +1802,14 @@
   padding: 0 14px;
   font-size: 16px;
   font-weight: 800;
-  color: var(--dl-on-primary);
+  color: var(--dl-on-action);
 }
 .dl-sobre__num::before {
   content: "";
   position: absolute;
   inset: 0 4px;
   z-index: -1;
-  background: var(--dl-primary);
+  background: var(--dl-action);
   transform: skewX(-12deg);
 }
 .dl-sobre__h2 {
@@ -1992,28 +1992,34 @@
   }
 }
 
-/* Bisel: onde o navegador corta cantos com a borda e o foco junto (`corner-shape`), campos,
-   seletores, painéis, folhas e botões de fechar ganham os cantos da lâmina (o de cima à esquerda
-   e o de baixo à direita); nos outros navegadores ficam os cantos levemente arredondados. */
+/* E · Canto leve, escolhido em 28/10: controles sem o recorte hexagonal.
+   As placas e as ações inclinadas conservam o desenho do Delta. */
+.dl-campo input,
+.dl-campo select,
+.dl-campo textarea,
+.dl-escolha__botao,
+.dl-escolha__lista,
+.dl-escolha__opcao,
+.dl-barra__busca,
+.dl-busca-aba,
+.dl-rod__busca-linha,
+.dl-cortina__fechar,
+.dl-escolha__fechar,
+.dl-leitura__fechar,
+.dl-folha__fechar,
+.dl-cab__acao:not(.dl-cab__acao--conversa),
+.dl-busca-aba__ir,
+.dl-rod__busca-linha button,
+.dl-barra__limpar {
+  border-radius: 6px;
+  corner-shape: round;
+}
+
+/* O bisel estrutural permanece nos painéis e nas folhas. */
 @supports (corner-shape: bevel) {
-  .dl-campo input,
-  .dl-campo select,
-  .dl-campo textarea,
-  .dl-escolha__botao,
-  .dl-barra__busca,
-  .dl-busca-aba,
-  .dl-rod__busca-linha {
-    border-radius: 10px 0;
-    corner-shape: bevel;
-  }
-  .dl-escolha__lista,
   .dl-pop__painel,
   .dl-leitura {
     border-radius: 14px 0;
-    corner-shape: bevel;
-  }
-  .dl-escolha__opcao {
-    border-radius: 7px 0;
     corner-shape: bevel;
   }
   .dl-folha__corpo,
@@ -2021,14 +2027,7 @@
     border-radius: 18px 18px 0 0;
     corner-shape: bevel;
   }
-  .dl-cortina__fechar,
-  .dl-escolha__fechar,
-  .dl-leitura__fechar,
-  .dl-folha__fechar,
-  .dl-cab__acao,
-  .dl-busca-aba__ir,
-  .dl-rod__busca-linha button,
-  .dl-barra__limpar {
+  .dl-cab__acao--conversa {
     border-radius: 9px 0;
     corner-shape: bevel;
   }

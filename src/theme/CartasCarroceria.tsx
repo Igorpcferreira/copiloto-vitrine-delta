@@ -13,7 +13,8 @@ import LinhaChegada from "./LinhaChegada";
 
 /** Proporção da foto na frente da carta (largura / altura), para o ponto focal achar o carro inteiro. */
 const ASPECTO = 1.25;
-const NO_VERSO = 4;
+// Prévia curta até a escolha do novo componente; o catálogo completo segue em "Ver todos".
+const NO_VERSO = 2;
 
 function Carta({ categoria, carros, base, indice }: { categoria: Categoria; carros: Vehicle[]; base: string; indice: number }) {
   const id = useId();

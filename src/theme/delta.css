@@ -16,9 +16,13 @@
   --dl-accent-ink: var(--color-brand-ink, #3c6e91);
   --dl-action: var(--apex-action-bg, #3a6a8c);
   --dl-on-action: #ffffff;
+  --dl-tint: color-mix(in srgb, var(--dl-accent) 8%, var(--dl-raised));
+  --dl-tint-ink: var(--dl-ink);
+  --dl-tint-accent: color-mix(in srgb, var(--dl-accent-ink) 84%, var(--dl-ink));
+  --dl-tint-line: color-mix(in srgb, var(--dl-accent) 24%, var(--dl-raised));
   --dl-muted: color-mix(in srgb, var(--dl-ink) 74%, var(--dl-bg));
   --dl-line: color-mix(in srgb, var(--dl-ink) 14%, var(--dl-bg));
-  --dl-soft: color-mix(in srgb, var(--dl-ink) 5%, var(--dl-bg));
+  --dl-soft: color-mix(in srgb, var(--dl-accent) 6%, var(--dl-bg));
   --dl-glass: color-mix(in srgb, var(--dl-raised) 90%, transparent);
   --dl-blur: saturate(1.5) blur(16px);
   --dl-shadow: 0 18px 40px -26px color-mix(in srgb, var(--dl-primary) 55%, transparent),
@@ -149,8 +153,8 @@
   --lamina-fundo: color-mix(in srgb, var(--dl-action) 86%, #000);
 }
 .dl-btn--escuro {
-  --lamina-fundo: var(--dl-primary);
-  --lamina-texto: var(--dl-on-primary);
+  --lamina-fundo: var(--dl-action);
+  --lamina-texto: var(--dl-on-action);
 }
 .dl-btn--linha {
   --lamina-borda: color-mix(in srgb, var(--dl-ink) 22%, var(--dl-bg));
@@ -244,9 +248,9 @@
 .dl-chip--ativo,
 .dl-chip[aria-checked="true"],
 .dl-chip[aria-pressed="true"] {
-  --lamina-fundo: var(--dl-primary);
-  --lamina-borda: var(--dl-primary);
-  --lamina-texto: var(--dl-on-primary);
+  --lamina-fundo: var(--dl-action);
+  --lamina-borda: var(--dl-action);
+  --lamina-texto: var(--dl-on-action);
 }
 .dl-chip small {
   font-size: 12px;
@@ -340,11 +344,11 @@
   border-color: var(--dl-brand-ink);
 }
 .dl-chave__item--atual {
-  color: var(--dl-on-primary);
+  color: var(--dl-on-action);
 }
 .dl-chave__item--atual::before {
-  background: var(--dl-primary);
-  border-color: var(--dl-primary);
+  background: var(--dl-action);
+  border-color: var(--dl-action);
 }
 .dl-site .dl-chave__item:focus-visible {
   outline: none;
@@ -524,6 +528,7 @@
   padding: 0 calc(28px + var(--dl-corte)) 0 var(--dl-gutter);
 }
 .dl-cab__placa--centro {
+  min-width: 0;
   --forma: polygon(0 0, 100% 0, calc(100% - var(--dl-corte) * 1.4) 100%, calc(var(--dl-corte) * 1.4) 100%);
   justify-self: center;
   padding: 0 calc(18px + var(--dl-corte) * 1.4);
@@ -649,9 +654,17 @@
 .dl-cab__acao--menu {
   display: none;
 }
-.dl-cab[data-estado="recolhido"] .dl-cab__acao-texto,
-.dl-cab[data-estado="busca"] .dl-cab__acao-texto {
+.dl-cab[data-estado="recolhido"] .dl-cab__acao-texto {
   display: none;
+}
+.dl-cab[data-estado="busca"] .dl-cab__acao--busca {
+  display: none;
+}
+.dl-cab[data-estado="busca"] .dl-cab__placa--acoes {
+  padding-left: 12px;
+}
+.dl-cab[data-estado="busca"] .dl-cab__acao--conversa {
+  min-height: 40px;
 }
 .dl-cab[data-estado="recolhido"] .dl-cab__acao--conversa,
 .dl-cab[data-estado="busca"] .dl-cab__acao--conversa {
@@ -664,8 +677,9 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  width: min(440px, 52vw);
-  height: 42px;
+  width: min(520px, 52vw);
+  min-width: 0;
+  height: 46px;
   padding: 0 4px 0 14px;
   border-radius: 10px;
   background: color-mix(in srgb, var(--dl-raised) 92%, transparent);
@@ -696,13 +710,30 @@
 .dl-busca-aba__ir {
   display: grid;
   place-items: center;
+  flex: 0 0 40px;
   width: 40px;
-  height: 34px;
+  height: 40px;
   border: 0;
   border-radius: 8px;
   background: var(--dl-action);
   color: var(--dl-on-action);
   cursor: pointer;
+}
+.dl-busca-aba__fechar {
+  display: grid;
+  place-items: center;
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-left: 1px solid var(--dl-line);
+  background: transparent;
+  color: var(--dl-muted);
+  cursor: pointer;
+}
+.dl-busca-aba__fechar:hover {
+  background: var(--dl-tint);
+  color: var(--dl-accent-ink);
 }
 
 /* Comprar: uma barra flutuante por vez (o header sobe quando a barra do estoque está presa e a
@@ -721,12 +752,30 @@
   }
   .dl-cab[data-estado="busca"] .dl-cab__placa--centro {
     display: flex;
+    order: 3;
+    flex: 1 0 100%;
+    justify-content: center;
+    height: 60px;
+    padding: 0 12px 10px;
+    --forma: polygon(0 0, 100% 0, calc(100% - 12px) 100%, 12px 100%);
+  }
+  .dl-cab[data-estado="busca"] .dl-cab__barra {
+    flex-wrap: wrap;
+    width: min(620px, 100%);
+    margin-inline: auto;
   }
   .dl-cab[data-estado="busca"] .dl-cab__placa--logo {
-    display: none;
+    display: flex;
+    flex: 1 1 auto;
+    --forma: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    padding-left: 20px;
+  }
+  .dl-cab[data-estado="busca"] .dl-cab__placa--acoes {
+    --forma: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    padding-right: 12px;
   }
   .dl-cab[data-estado="busca"] .dl-busca-aba {
-    width: min(560px, calc(100vw - 150px));
+    width: 100%;
   }
   .dl-cab__acao--conversa {
     display: none;
@@ -1109,8 +1158,8 @@ body:has(.dl-consentimento) .dl-rod {
   gap: 4px;
   min-height: 28px;
   padding: 0 16px;
-  background: var(--dl-primary);
-  color: var(--dl-on-primary);
+  background: var(--dl-action);
+  color: var(--dl-on-action);
   clip-path: polygon(6px 0, 100% 0, calc(100% - 6px) 100%, 0 100%);
   font-size: 13px;
   font-weight: 700;
@@ -1550,7 +1599,7 @@ body:has(.dl-consentimento) .dl-rod {
   height: 26px;
   margin-left: -9px;
   transform: translateY(-50%);
-  background: var(--dl-primary);
+  background: var(--dl-action);
   clip-path: polygon(5px 0, 100% 0, calc(100% - 5px) 100%, 0 100%);
   pointer-events: none;
   transition: transform 0.15s;
@@ -1632,8 +1681,8 @@ body:has(.dl-consentimento) .dl-rod {
   position: absolute;
   bottom: 0;
   padding: 3px 13px;
-  background: var(--dl-primary);
-  color: var(--dl-on-primary);
+  background: var(--dl-action);
+  color: var(--dl-on-action);
   clip-path: polygon(5px 0, 100% 0, calc(100% - 5px) 100%, 0 100%);
   font-size: 13px;
   font-weight: 800;
@@ -1997,8 +2046,8 @@ body:has(.dl-consentimento) .dl-rod {
   width: min(1180px, calc(100% - 2 * var(--dl-gutter)));
   min-height: 84px;
   padding: 14px 18px 14px 40px;
-  background: color-mix(in srgb, var(--dl-primary) 92%, transparent);
-  color: var(--dl-on-primary);
+  background: var(--dl-tint);
+  color: var(--dl-tint-ink);
   clip-path: polygon(22px 0, 100% 0, calc(100% - 22px) 100%, 0 100%);
   pointer-events: auto;
   transform-origin: left center;
@@ -2011,7 +2060,12 @@ body:has(.dl-consentimento) .dl-rod {
   line-height: 1.1;
 }
 .dl-fita__botao {
+  --lamina-fundo: var(--dl-action);
+  --lamina-texto: var(--dl-on-action);
   margin-right: 18px;
+}
+.dl-fita__botao:hover {
+  --lamina-fundo: color-mix(in srgb, var(--dl-action) 86%, #000);
 }
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {

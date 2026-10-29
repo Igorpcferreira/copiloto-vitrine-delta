@@ -49,6 +49,15 @@ Os roteiros de navegador exigem Playwright no ambiente de validação e usam `VI
 - `mobile-audit` confere 5 páginas em 7 larguras: rolagem lateral, alvos de toque, texto miúdo, WhatsApp e nada fixo cobrindo o crédito do rodapé.
 - `contrast-check` mede pares de cada componente e `contrast-scan`, todo texto visível, em três paletas; os dois contam o fundo das lâminas (o `::before` inclinado).
 
+## Revisão local de 28/10/2026
+
+- Demo: `http://localhost:3600`.
+- Escolha de categorias: `http://localhost:3600/propostas/categorias`.
+- Escolha de botões e campos: `http://localhost:3600/propostas/botoes`.
+- [Relatório da revisão](docs/revisao-2026-10-28.md), [categorias](docs/propostas-categorias-2026-10-28.md) e [origem das avaliações](docs/avaliacoes-2026-10-28.md).
+
+Os formatos propostos permanecem separados do tema até a escolha. As opções existem apenas na demo e ficam preservadas.
+
 ## Modo integrado
 
 Configure `CLIENT_API_URL`, `CLIENT_API_TOKEN` e `CLIENT_SLUG` no ambiente do servidor e use `npm run dev:integrated -- --port 3602`. Sem as três variáveis, o modo integrado mostra um erro explícito; zero veículos não deve ser lido como estoque real.

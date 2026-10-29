@@ -11,8 +11,8 @@ import Regua, { limitesDePreco, passoDePreco, precoCurto } from "./Regua";
 const OUTRAS = "__outras";
 
 /**
- * Busca da inicial do Delta, "painel de réguas": uma placa escura, como um painel de
- * instrumentos, atravessando o corte diagonal da abertura. Marca (com logos) e Carroceria em
+ * Busca da inicial do Delta, "painel de réguas": uma placa clara com a cor da loja,
+ * atravessando o corte diagonal da abertura. Marca (com logos) e Carroceria em
  * seletores, a faixa de preço numa régua de dois polegares (do menor ao maior preço do estoque) e
  * o ano numa régua de um polegar ("a partir de"), com os valores em bandeiras que andam com os
  * polegares. Leva ao Comprar com os mesmos parâmetros do contrato. Nenhuma contagem (regra da

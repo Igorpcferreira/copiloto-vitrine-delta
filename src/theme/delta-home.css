@@ -158,7 +158,7 @@
   }
 }
 
-/* Painel de réguas (busca): placa escura atravessando o corte da abertura ------------------- */
+/* Painel de réguas: superfície clara com a cor de ação da loja. */
 .dl-painel {
   position: relative;
   z-index: 3;
@@ -173,7 +173,7 @@
   align-items: end;
   gap: 14px 28px;
   padding: 12px 16px 14px 22px;
-  color: var(--dl-on-primary);
+  color: var(--dl-tint-ink);
 }
 .dl-painel__caixa--aviso {
   display: block;
@@ -190,32 +190,32 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: var(--dl-primary);
+  background: var(--dl-tint);
   clip-path: polygon(var(--c) 0, 100% 0, 100% calc(100% - var(--c)), calc(100% - var(--c)) 100%, 0 100%, 0 var(--c));
 }
 .dl-painel :focus-visible,
 .dl-painel .dl-btn:focus-visible::before {
-  outline-color: var(--dl-on-primary);
+  outline-color: var(--dl-accent-ink);
 }
 .dl-painel .dl-escolha__botao {
   min-height: 50px;
-  background: color-mix(in srgb, var(--dl-on-primary) 8%, transparent);
-  border-color: color-mix(in srgb, var(--dl-on-primary) 24%, transparent);
-  color: var(--dl-on-primary);
+  background: var(--dl-raised);
+  border-color: var(--dl-tint-line);
+  color: var(--dl-ink);
 }
 .dl-painel .dl-escolha__botao:hover,
 .dl-painel .dl-escolha[data-aberto] .dl-escolha__botao {
-  border-color: color-mix(in srgb, var(--dl-on-primary) 64%, transparent);
+  border-color: var(--dl-accent-ink);
 }
 .dl-painel .dl-escolha__rotulo,
 .dl-painel .dl-escolha__seta,
 .dl-painel .dl-regua__rotulo {
-  color: color-mix(in srgb, var(--dl-on-primary) 74%, var(--dl-primary));
+  color: var(--dl-muted);
 }
 .dl-painel .dl-escolha__valor[data-vazio] {
-  color: var(--dl-on-primary);
+  color: var(--dl-ink);
 }
-/* Logos na cor original: no painel escuro, cada um numa plaquinha clara. */
+/* Logos na cor original sobre uma plaquinha branca. */
 .dl-painel .dl-escolha__logo-mini {
   background: #ffffff;
   border-radius: 3px;
@@ -224,21 +224,21 @@
   color: var(--dl-ink);
 }
 .dl-painel .dl-regua__trilho {
-  background: color-mix(in srgb, var(--dl-on-primary) 22%, transparent);
+  background: var(--dl-tint-line);
 }
 .dl-painel .dl-regua__trilho::after {
   background: repeating-linear-gradient(
     to right,
-    color-mix(in srgb, var(--dl-on-primary) 34%, transparent) 0 1px,
+    color-mix(in srgb, var(--dl-accent-ink) 34%, transparent) 0 1px,
     transparent 1px calc(10% - 0.1px)
   );
 }
 .dl-painel .dl-regua__polegar {
-  background: var(--dl-on-primary);
+  background: var(--dl-action);
 }
 .dl-painel .dl-regua__bandeira {
-  background: var(--dl-on-primary);
-  color: var(--dl-primary);
+  background: var(--dl-action);
+  color: var(--dl-on-action);
 }
 /* O rótulo fica ao lado da régua, na altura dela; as bandeiras ficam sobre os polegares. */
 .dl-painel .dl-regua--bandeiras {
@@ -263,16 +263,16 @@
   top: 4px;
   bottom: 4px;
   width: 1px;
-  background: color-mix(in srgb, var(--dl-on-primary) 20%, transparent);
+  background: var(--dl-tint-line);
 }
 .dl-painel__ir {
-  --lamina-fundo: var(--dl-on-primary);
-  --lamina-texto: var(--dl-primary);
+  --lamina-fundo: var(--dl-action);
+  --lamina-texto: var(--dl-on-action);
   min-height: 50px;
   align-self: end;
 }
 .dl-painel__ir:hover {
-  --lamina-fundo: color-mix(in srgb, var(--dl-on-primary) 86%, var(--dl-accent));
+  --lamina-fundo: color-mix(in srgb, var(--dl-action) 86%, #000);
 }
 .dl-painel__ir-curto {
   display: none;
@@ -464,27 +464,27 @@
   width: clamp(124px, 15vw, 164px);
   height: 56px;
   padding: 0 20px 0 16px;
-  color: var(--dl-on-primary);
+  color: var(--dl-on-action);
 }
 .dl-marca--chegada::before {
   inset: 0 8px;
   z-index: -1;
   height: auto;
   border: 0;
-  background: var(--dl-primary);
+  background: var(--dl-action);
   transition: background-color 0.2s;
 }
 .dl-marca--chegada:hover {
-  color: var(--dl-on-primary);
+  color: var(--dl-on-action);
 }
 .dl-marca--chegada:hover::before {
-  background: color-mix(in srgb, var(--dl-primary) 84%, var(--dl-accent));
+  background: color-mix(in srgb, var(--dl-action) 84%, var(--dl-accent));
 }
 .dl-marca__xadrez {
   flex: 0 0 auto;
   width: 16px;
   height: 40px;
-  background: repeating-conic-gradient(var(--dl-on-primary) 0 25%, transparent 0 50%) 0 0 / 8px 8px;
+  background: repeating-conic-gradient(var(--dl-on-action) 0 25%, transparent 0 50%) 0 0 / 8px 8px;
   transform: skewX(-12deg);
 }
 .dl-marca--chegada .dl-marca__nome {
@@ -643,8 +643,8 @@
   transform: rotateY(180deg);
   padding: 20px 20px 16px;
   gap: 12px;
-  background: var(--dl-primary);
-  color: var(--dl-on-primary);
+  background: var(--dl-tint);
+  color: var(--dl-tint-ink);
 }
 .dl-carroceria__foto {
   position: relative;
@@ -683,14 +683,15 @@
 }
 .dl-carroceria__lado--verso .dl-carroceria__virar {
   --lamina-fundo: transparent;
-  --lamina-borda: color-mix(in srgb, var(--dl-on-primary) 36%, transparent);
-  --lamina-texto: var(--dl-on-primary);
+  --lamina-borda: var(--dl-tint-line);
+  --lamina-texto: var(--dl-accent-ink);
 }
 .dl-carroceria__lado--verso .dl-carroceria__virar:hover {
-  --lamina-borda: var(--dl-on-primary);
+  --lamina-borda: var(--dl-accent-ink);
 }
 .dl-carroceria__modelos {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 2px;
   margin: 0;
   padding: 0;
@@ -699,13 +700,12 @@
   overflow: hidden;
 }
 .dl-carroceria__modelos a {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 10px;
+  display: grid;
+  gap: 3px;
+  min-width: 0;
   min-height: 40px;
   padding: 8px 0;
-  border-bottom: 1px solid color-mix(in srgb, var(--dl-on-primary) 14%, transparent);
+  border-bottom: 1px solid var(--dl-tint-line);
   font-size: 14px;
 }
 .dl-carroceria__modelos a span {
@@ -717,6 +717,8 @@
 .dl-carroceria__modelos a strong {
   flex: 0 0 auto;
   font-weight: 800;
+  color: var(--dl-tint-accent);
+  white-space: nowrap;
 }
 .dl-carroceria__modelos a:hover span {
   text-decoration: underline;
@@ -1098,8 +1100,8 @@
   gap: 12px;
   margin-right: calc(-1 * var(--corte-venda));
   padding: 22px calc(var(--corte-venda) + 26px) 20px 30px;
-  background: var(--dl-primary);
-  color: var(--dl-on-primary);
+  background: var(--dl-tint);
+  color: var(--dl-tint-ink);
   clip-path: polygon(var(--c2) 0, 100% 0, calc(100% - var(--corte-venda)) 100%, 0 100%, 0 var(--c2));
 }
 .dl-venda__titulo {
@@ -1122,10 +1124,10 @@
   gap: 10px;
   font-size: 14px;
   font-weight: 700;
-  color: color-mix(in srgb, var(--dl-on-primary) 74%, var(--dl-primary));
+  color: var(--dl-muted);
 }
 .dl-venda__etapas li[aria-current="step"] {
-  color: var(--dl-on-primary);
+  color: var(--dl-tint-ink);
 }
 .dl-venda__marca {
   display: grid;
@@ -1133,15 +1135,15 @@
   flex: 0 0 auto;
   width: 28px;
   height: 22px;
-  background: color-mix(in srgb, var(--dl-on-primary) 16%, transparent);
-  color: var(--dl-on-primary);
+  background: var(--dl-raised);
+  color: var(--dl-tint-accent);
   clip-path: polygon(5px 0, 100% 0, calc(100% - 5px) 100%, 0 100%);
   font-size: 12px;
   font-weight: 800;
 }
 .dl-venda__etapas li[aria-current="step"] .dl-venda__marca {
-  background: var(--dl-on-primary);
-  color: var(--dl-primary);
+  background: var(--dl-action);
+  color: var(--dl-on-action);
 }
 .dl-venda__etapas li[data-feita] .dl-venda__marca {
   background: var(--dl-action);
@@ -1154,7 +1156,7 @@
   gap: 0 8px;
   margin: 0;
   font-size: 14px;
-  color: color-mix(in srgb, var(--dl-on-primary) 82%, var(--dl-primary));
+  color: var(--dl-muted);
 }
 .dl-venda__financiar a {
   display: inline-flex;
@@ -1162,7 +1164,7 @@
   gap: 6px;
   min-height: 40px;
   font-weight: 800;
-  color: var(--dl-on-primary);
+  color: var(--dl-tint-accent);
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 4px;
@@ -1223,7 +1225,8 @@
 }
 .dl-opcao:hover,
 .dl-opcao--ativa {
-  --lamina-borda: var(--dl-brand-ink);
+  --lamina-borda: var(--dl-accent-ink);
+  --lamina-fundo: var(--dl-tint);
 }
 .dl-site .dl-opcao:focus-visible {
   outline: none;
@@ -1443,8 +1446,8 @@
   height: 40px;
   border-radius: 999px;
   overflow: hidden;
-  background: var(--dl-primary);
-  color: var(--dl-on-primary);
+  background: var(--dl-action);
+  color: var(--dl-on-action);
   font-size: 14px;
   font-weight: 800;
 }
@@ -1587,8 +1590,8 @@
   place-items: center;
   width: 46px;
   height: 38px;
-  background: var(--dl-primary);
-  color: var(--dl-on-primary);
+  background: var(--dl-action);
+  color: var(--dl-on-action);
   clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
 }
 .dl-chegada__baixo {
@@ -1651,9 +1654,9 @@
   color: var(--dl-ink);
 }
 .dl-chip--link:hover {
-  --lamina-fundo: var(--dl-primary);
-  --lamina-borda: var(--dl-primary);
-  --lamina-texto: var(--dl-on-primary);
+  --lamina-fundo: var(--dl-action);
+  --lamina-borda: var(--dl-action);
+  --lamina-texto: var(--dl-on-action);
 }
 .dl-chegada__dados {
   display: grid;

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState, type KeyboardEvent } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent, type TransitionEvent } from "react";
 import { isRenderableImageSrc } from "@/lib/image-src";
 import type { TenantConfig } from "@/lib/types";
 import Dialogo from "./base/Dialogo";
@@ -49,11 +49,29 @@ function Rosto({ avaliacao }: { avaliacao: Avaliacao }) {
  */
 export default function RoloVozes({ config }: { config: TenantConfig }) {
   const avaliacoes = config.testimonials ?? [];
+  if (!avaliacoes.length) return null;
+  // Uma troca vinda do painel reinicia apenas este mecanismo. Isso impede que o
+  // índice de uma lista antiga aponte para outro autor na lista nova.
+  const chave = avaliacoes.map((a) => `${a.name}\u0000${a.text}\u0000${a.rating ?? ""}`).join("\u0001");
+  return <RoloDeVozes key={chave} config={config} avaliacoes={avaliacoes} />;
+}
+
+function RoloDeVozes({ config, avaliacoes }: { config: TenantConfig; avaliacoes: Avaliacao[] }) {
+  const total = avaliacoes.length;
   const janela = useRef<HTMLDivElement>(null);
   const lista = useRef<HTMLUListElement>(null);
   const itens = useRef<(HTMLLIElement | null)[]>([]);
-  const [foco, setFoco] = useState(0);
+  // Três voltas tornam a passagem entre a última e a primeira contínua. Depois da
+  // transição, o rolo volta silenciosamente à cópia central, no mesmo lugar visual.
+  const [volta, setVolta] = useState(() => total);
+  const [animar, setAnimar] = useState(true);
   const [lendo, setLendo] = useState<number | null>(null);
+  // Se o painel trocar a lista, não deixa a posição anterior apontar fora da
+  // nova faixa. A próxima interação volta a percorrer normalmente as três voltas.
+  const limiteDaFaixa = total > 1 ? total * 3 - 1 : 0;
+  const voltaVisivel = total ? Math.max(0, Math.min(limiteDaFaixa, volta)) : 0;
+  const foco = total ? ((voltaVisivel % total) + total) % total : 0;
+  const faixa = total ? Array.from({ length: total > 1 ? total * 3 : 1 }, (_, i) => ({ avaliacao: avaliacoes[i % total], indice: i })) : [];
 
   // Centraliza a avaliação da vez (um `transform` no rolo, medido só quando ela muda ou a janela
   // muda de tamanho), sem deixar vão nas pontas: a primeira encosta em cima e a última embaixo.
@@ -63,7 +81,7 @@ export default function RoloVozes({ config }: { config: TenantConfig }) {
     const rolo = lista.current;
     if (!raiz || !rolo) return;
     const centrar = () => {
-      const el = itens.current[foco];
+      const el = itens.current[voltaVisivel];
       if (!el) return;
       const minimo = Math.min(0, raiz.clientHeight - rolo.scrollHeight);
       const y = Math.round(Math.max(minimo, Math.min(0, raiz.clientHeight / 2 - (el.offsetTop + el.offsetHeight / 2))));
@@ -75,18 +93,25 @@ export default function RoloVozes({ config }: { config: TenantConfig }) {
     const obs = new ResizeObserver(centrar);
     obs.observe(raiz);
     return () => obs.disconnect();
-  }, [foco, avaliacoes.length]);
+  }, [voltaVisivel, total]);
 
-  if (!avaliacoes.length) return null;
   const nota = config.googleRating;
-  const ir = (i: number) => setFoco(Math.max(0, Math.min(avaliacoes.length - 1, i)));
+  const ir = (i: number) => setVolta(i < 0 || i > limiteDaFaixa ? total + (((i % total) + total) % total) : i);
+  const anterior = () => ir(voltaVisivel - 1);
+  const proxima = () => ir(voltaVisivel + 1);
   const teclas = (e: KeyboardEvent) => {
-    if (e.key === "ArrowUp") ir(foco + 1);
-    else if (e.key === "ArrowDown") ir(foco - 1);
-    else if (e.key === "Home") ir(0);
-    else if (e.key === "End") ir(avaliacoes.length - 1);
+    if (e.key === "ArrowUp") proxima();
+    else if (e.key === "ArrowDown") anterior();
+    else if (e.key === "Home") ir(total);
+    else if (e.key === "End") ir(total * 2 - 1);
     else return;
     e.preventDefault();
+  };
+  const aoFimDaTransicao = (e: TransitionEvent<HTMLUListElement>) => {
+    if (e.target !== e.currentTarget || e.propertyName !== "transform" || total < 2 || (voltaVisivel >= total && voltaVisivel < total * 2)) return;
+    setAnimar(false);
+    setVolta(total + foco);
+    requestAnimationFrame(() => requestAnimationFrame(() => setAnimar(true)));
   };
 
   return (
@@ -115,13 +140,13 @@ export default function RoloVozes({ config }: { config: TenantConfig }) {
             tabIndex={0}
             role="region"
             aria-roledescription="rolo"
-            aria-label={`Avaliações. Avaliação ${foco + 1} de ${avaliacoes.length}; setas para cima e para baixo trocam.`}
+            aria-label="Avaliações. Use as setas para cima e para baixo para trocar a avaliação em destaque."
             onKeyDown={teclas}
           >
-            <ul ref={lista} className="dl-vozes__lista">
-              {avaliacoes.map((a, i) => {
+            <ul ref={lista} className="dl-vozes__lista" style={animar ? undefined : { transition: "none" }} onTransitionEnd={aoFimDaTransicao}>
+              {faixa.map(({ avaliacao: a, indice: i }) => {
                 const longa = a.text.length > LIMITE;
-                const daVez = i === foco;
+                const daVez = i === voltaVisivel;
                 return (
                   <li
                     key={`${a.name}-${i}`}
@@ -140,7 +165,7 @@ export default function RoloVozes({ config }: { config: TenantConfig }) {
                       </div>
                       <p className={cx("dl-voz__texto", longa && "dl-voz__texto--corta")}>{a.text}</p>
                       {longa && (
-                        <button type="button" className="dl-voz__ler" onClick={() => setLendo(i)} tabIndex={daVez ? 0 : -1}>
+                        <button type="button" className="dl-voz__ler" onClick={() => setLendo(i % total)} tabIndex={daVez ? 0 : -1}>
                           Ler tudo
                         </button>
                       )}
@@ -150,16 +175,16 @@ export default function RoloVozes({ config }: { config: TenantConfig }) {
               })}
             </ul>
           </div>
-          {avaliacoes.length > 1 && (
+          {total > 1 && (
             <div className="dl-vozes__botoes">
-              <button type="button" className="dl-btn dl-btn--linha dl-btn--pequeno" disabled={foco === 0} onClick={() => ir(foco - 1)}>
+              <button type="button" className="dl-btn dl-btn--linha dl-btn--pequeno" onClick={anterior}>
                 <ArrowDownIcon size={16} />
                 Anterior
               </button>
               <span className="dl-vozes__trilho" aria-hidden="true">
-                <span style={{ transform: `scaleX(${(foco + 1) / avaliacoes.length})` }} />
+                <span style={{ transform: `scaleX(${(foco + 1) / total})` }} />
               </span>
-              <button type="button" className="dl-btn dl-btn--linha dl-btn--pequeno" disabled={foco === avaliacoes.length - 1} onClick={() => ir(foco + 1)}>
+              <button type="button" className="dl-btn dl-btn--linha dl-btn--pequeno" onClick={proxima}>
                 <ArrowUpIcon size={16} />
                 Próxima
               </button>

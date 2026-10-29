@@ -45,3 +45,7 @@ Template novo, feito do zero sobre a base técnica do Halo (contratos, rotas e d
 - **Boxicons** pelo pacote `@boxicons/react`, família única de ícones de interface; logos de marca não são ícones.
 - **Sem dependências novas** em relação ao Halo e ao Atlas. Sem GSAP, WebGL ou 3D.
 - **Fotos e textos de lojas reais:** na demo, as mídias, avaliações e fotos públicas da Radial, como já autorizado pelo usuário para os templates. Nenhum dado pessoal novo.
+
+## Revisão de 28/10/2026
+
+Header e paleta revisados a partir dos prints e do feedback do usuário. Opções de categorias e botões são composições locais com os componentes, fotos e ícones Boxicons já presentes no projeto; nenhuma biblioteca ou mídia nova para os protótipos. O comentário adicional da Radial foi verificado na página oficial da loja, com origem e limite em `avaliacoes-2026-10-28.md`. Decisões e validação em `revisao-2026-10-28.md`.
