@@ -11,7 +11,6 @@ export interface Opcao {
   rotulo: string;
   logo?: string;
   estilo?: CSSProperties;
-  detalhe?: string;
 }
 
 /**
@@ -146,7 +145,6 @@ export default function Escolha({
         ) : null}
         <span className={p("__texto")}>
           {o.rotulo}
-          {o.detalhe && <small>{o.detalhe}</small>}
         </span>
         {marcado && <CheckIcon className={p("__marca")} />}
       </div>

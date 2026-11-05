@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { Marca } from "./base/montar";
 import { usePausa } from "./base/ganchos";
-import { ArrowRightIcon } from "./base/icones";
+import { ArrowRightIcon, PauseIcon, PlayIcon } from "./base/icones";
 import { comprar } from "./base/util";
 
 /** Uma ultrapassagem a cada intervalo, com esta duração, em ms. */
@@ -26,7 +26,9 @@ const DURACAO = 760;
 export default function MarcasPista({ base, marcas, outras }: { base: string; marcas: Marca[]; outras?: string }) {
   const caixa = useRef<HTMLDivElement>(null);
   const placas = useRef(new Map<string, HTMLLIElement>());
-  const { pausado, reduzido } = usePausa(caixa);
+  const { pausado: pausadoSozinho, reduzido } = usePausa(caixa);
+  const [parado, setParado] = useState(false);
+  const pausado = pausadoSozinho || parado;
   const [ordem, setOrdem] = useState(() => marcas.map((m) => m.nome));
   const atual = useRef(ordem);
   const vez = useRef(0);
@@ -123,6 +125,17 @@ export default function MarcasPista({ base, marcas, outras }: { base: string; ma
           <Link href={comprar(base, outras)} className="dl-marcas__outras">
             Outras marcas
           </Link>
+        )}
+        {!reduzido && marcas.length > 1 && (
+          <button
+            type="button"
+            className="dl-marcas__pausa"
+            aria-pressed={parado}
+            aria-label={parado ? "Continuar a troca das marcas" : "Pausar a troca das marcas"}
+            onClick={() => setParado((p) => !p)}
+          >
+            {parado ? <PlayIcon size={16} /> : <PauseIcon size={16} />}
+          </button>
         )}
       </div>
     </section>

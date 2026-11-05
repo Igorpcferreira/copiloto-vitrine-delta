@@ -53,6 +53,47 @@ body {
   outline: none;
 }
 
+:root[data-input="pointer"] :focus-visible:not(input, textarea, select) {
+  outline: none !important;
+}
+
+.hero-media-control {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  z-index: 30;
+}
+
+.hero-media-toggle {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 999px;
+  background: rgb(0 0 0 / 45%);
+  color: #ffffff;
+  backdrop-filter: blur(4px);
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+
+.hero-media-toggle:hover {
+  background: rgb(0 0 0 / 60%);
+}
+
+.hero-media-toggle:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+@media (min-width: 768px) {
+  .hero-media-control {
+    right: 24px;
+    bottom: 24px;
+  }
+}
+
 @keyframes drawer-in {
   from {
     transform: translateX(100%);

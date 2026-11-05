@@ -15,6 +15,10 @@
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0 calc(100% - var(--corte-hero)));
   overflow: hidden;
 }
+.dl-abertura .hero-media-control {
+  top: calc(var(--dl-cab-h, 64px) + 24px);
+  bottom: auto;
+}
 .dl-abertura__midia {
   position: absolute;
   inset: 0;
@@ -502,6 +506,21 @@
   font-weight: 700;
   color: var(--dl-accent-ink);
 }
+.dl-marcas__pausa {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin-top: 8px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--dl-ink) 7%, transparent);
+  color: var(--dl-muted);
+  transition: background-color 150ms ease, color 150ms ease;
+}
+.dl-marcas__pausa:hover {
+  background: color-mix(in srgb, var(--dl-ink) 12%, transparent);
+  color: var(--dl-ink);
+}
 .dl-marcas__outras:hover {
   text-decoration: underline;
   text-underline-offset: 4px;
@@ -604,27 +623,33 @@
   flex: 0 0 auto;
   width: clamp(260px, 24vw, 300px);
   height: 300px;
-  perspective: 1200px;
   scroll-snap-align: start;
 }
 .dl-carroceria__giro {
   position: relative;
   width: 100%;
   height: 100%;
-  transform-style: preserve-3d;
-  transition: transform 0.6s var(--dl-ease);
 }
-.dl-carroceria--virada .dl-carroceria__giro {
-  transform: rotateY(180deg);
-}
+/* A carta vira em 2D: o lado à vista se fecha na largura e o outro se abre no mesmo eixo. Sem 3D:
+   no Safari o verso escondido de uma carta em 3D recebia o toque do botão da frente. O lado
+   fechado tem largura zero, então não recebe toque. */
 .dl-carroceria__lado {
   position: absolute;
   inset: 0;
   display: flex;
   flex-direction: column;
   clip-path: polygon(var(--c) 0, 100% 0, 100% calc(100% - var(--c)), calc(100% - var(--c)) 100%, 0 100%, 0 var(--c));
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
+  transform: scaleX(0);
+  transition: transform 0.24s cubic-bezier(0.55, 0, 1, 0.45);
+}
+.dl-carroceria__lado--frente,
+.dl-carroceria--virada .dl-carroceria__lado--verso {
+  transform: scaleX(1);
+  transition: transform 0.26s cubic-bezier(0, 0.55, 0.45, 1) 0.24s;
+}
+.dl-carroceria--virada .dl-carroceria__lado--frente {
+  transform: scaleX(0);
+  transition: transform 0.24s cubic-bezier(0.55, 0, 1, 0.45);
 }
 .dl-carroceria__lado--frente {
   padding: 1px;
@@ -640,7 +665,6 @@
   clip-path: polygon(var(--c2) 0, 100% 0, 100% calc(100% - var(--c2)), calc(100% - var(--c2)) 100%, 0 100%, 0 var(--c2));
 }
 .dl-carroceria__lado--verso {
-  transform: rotateY(180deg);
   padding: 20px 20px 16px;
   gap: 12px;
   background: var(--dl-tint);
@@ -745,19 +769,11 @@
   font-weight: 800;
 }
 @media (prefers-reduced-motion: reduce) {
-  .dl-carroceria__giro {
-    transform: none !important;
-    transition: none;
-  }
-  .dl-carroceria__lado--verso {
-    transform: none;
-    visibility: hidden;
-  }
-  .dl-carroceria--virada .dl-carroceria__lado--verso {
-    visibility: visible;
-  }
+  .dl-carroceria__lado,
+  .dl-carroceria__lado--frente,
+  .dl-carroceria--virada .dl-carroceria__lado--verso,
   .dl-carroceria--virada .dl-carroceria__lado--frente {
-    visibility: hidden;
+    transition: none;
   }
 }
 @media (max-width: 639px) {

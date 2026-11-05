@@ -124,6 +124,9 @@
 .dl-site .dl-seta:focus-visible {
   outline: none;
 }
+:root[data-input="pointer"] :focus-visible::before {
+  outline: none !important;
+}
 .dl-btn:focus-visible::before,
 .dl-chip:focus-visible::before,
 .dl-seta:focus-visible::before {
@@ -573,7 +576,7 @@
 }
 .dl-cab[data-estado="recolhido"] .dl-cab__placa::before,
 .dl-cab[data-estado="busca"] .dl-cab__placa::before {
-  background: var(--header-bg, color-mix(in srgb, var(--dl-raised) 93%, transparent));
+  background: var(--header-bg, var(--dl-raised));
 }
 .dl-cab[data-estado="recolhido"] .dl-cab__placa,
 .dl-cab[data-estado="busca"] .dl-cab__placa {
@@ -749,8 +752,8 @@
 
 /* Comprar: uma barra flutuante por vez (o header sobe quando a barra do estoque está presa e a
    página desce; volta ao subir). Só o foco de teclado segura um dos dois. */
-:root[data-dl-estoque="presa"][data-dl-rolagem="desce"]:not(:has(.dl-cab :focus-visible)) .dl-cab,
-:root[data-dl-estoque="presa"]:has(.dl-barra :focus-visible):not(:has(.dl-cab :focus-visible)) .dl-cab {
+:root[data-dl-estoque="presa"][data-dl-rolagem="desce"]:is([data-input="pointer"], :not(:has(.dl-cab :focus-visible))) .dl-cab,
+:root[data-dl-estoque="presa"]:has(.dl-barra :focus-visible):is([data-input="pointer"], :not(:has(.dl-cab :focus-visible))) .dl-cab {
   transform: translateY(calc(-100% - 12px));
 }
 

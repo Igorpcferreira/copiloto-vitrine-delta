@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Fragment } from "react";
-import HeroMedia from "@/components/HeroMedia";
+import HeroMedia, { HeroMediaControlSlot } from "@/components/HeroMedia";
 import { DEFAULT_STOCK_NOUN, capitalize, myPossessive, possessive, type StockNoun } from "@/lib/stock-noun";
 import type { TenantConfig } from "@/lib/types";
 import { ArrowRightIcon } from "./base/icones";
@@ -40,6 +40,7 @@ export default function Abertura({ config, base, noun = DEFAULT_STOCK_NOUN }: { 
         <HeroMedia imageUrl={config.bannerUrl} appearance={config.appearance} />
       </div>
       <div className="dl-abertura__veu" aria-hidden="true" />
+      <HeroMediaControlSlot />
       <div className="dl-wrap dl-abertura__conteudo">
         <div className="dl-abertura__sai">
           <p className="dl-etiqueta dl-abertura__local">

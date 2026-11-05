@@ -1,3 +1,4 @@
+import InputModality from "@/components/InputModality";
 import { buildAppearanceVars } from "@/lib/appearance";
 import type { Metadata } from "next";
 import { Hanken_Grotesk } from "next/font/google";
@@ -110,7 +111,10 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{ __html: jsonLd(dealer) }}
         />
       </head>
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col">
+        {children}
+        <InputModality />
+      </body>
     </html>
   );
 }

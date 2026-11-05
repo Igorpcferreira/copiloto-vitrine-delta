@@ -19,9 +19,10 @@ interface Capitulo {
  * Fileiras da galeria justificada: as fotos entram na ordem até a fileira passar da largura na
  * altura-alvo, e a fileira encolhe até caber exatamente. A última, se ficar curta, se junta à de
  * cima quando a altura não cai demais; senão fica na altura-alvo, sem esticar a foto. No celular
- * (`estreito`) a última sozinha ocupa a largura toda: foto pequena ali não serve.
+ * (`estreito`) cada foto ocupa a largura toda: foto pequena ali não serve (pedido de 04/11/2026).
  */
 function fileiras(razoes: number[], largura: number, alvo: number, vao: number, estreito: boolean) {
+  if (estreito) return razoes.map((razao, i) => ({ itens: [i], altura: largura / razao }));
   const linhas: { itens: number[]; altura: number }[] = [];
   const altura = (itens: number[]) => (largura - vao * (itens.length - 1)) / itens.reduce((t, k) => t + razoes[k], 0);
   let atual: number[] = [];
@@ -35,8 +36,8 @@ function fileiras(razoes: number[], largura: number, alvo: number, vao: number, 
   if (atual.length) {
     const anterior = linhas[linhas.length - 1];
     const juntos = anterior ? [...anterior.itens, ...atual] : [];
-    if (anterior && altura(juntos) >= alvo * (estreito ? 0.8 : 0.62)) linhas[linhas.length - 1] = { itens: juntos, altura: altura(juntos) };
-    else linhas.push({ itens: atual, altura: estreito ? altura(atual) : Math.min(altura(atual), alvo * 1.2) });
+    if (anterior && altura(juntos) >= alvo * 0.62) linhas[linhas.length - 1] = { itens: juntos, altura: altura(juntos) };
+    else linhas.push({ itens: atual, altura: Math.min(altura(atual), alvo * 1.2) });
   }
   return linhas;
 }
@@ -45,24 +46,22 @@ function fileiras(razoes: number[], largura: number, alvo: number, vao: number, 
 function Galeria({ fotos, aoAbrir }: { fotos: { src: string; largura: number; altura: number }[]; aoAbrir: (i: number) => void }) {
   const caixa = useRef<HTMLUListElement>(null);
   const [largura, setLargura] = useState(0);
-  const [alvo, setAlvo] = useState(220);
   useEffect(() => {
     const el = caixa.current;
     if (!el) return;
     const medir = () => {
       setLargura(el.clientWidth);
-      setAlvo(el.clientWidth < 600 ? 150 : 220);
     };
     medir();
     const obs = new ResizeObserver(medir);
     obs.observe(el);
     return () => obs.disconnect();
   }, []);
-  const vao = largura && largura < 600 ? 6 : 8;
+  const vao = 8;
   const razoes = fotos.map((f) => f.largura / f.altura);
   const tamanhos = new Map<number, { w: number; h: number }>();
   if (largura) {
-    for (const linha of fileiras(razoes, largura, alvo, vao, largura < 600)) {
+    for (const linha of fileiras(razoes, largura, 220, vao, largura < 600)) {
       for (const i of linha.itens) tamanhos.set(i, { w: Math.floor(razoes[i] * linha.altura * 100) / 100, h: Math.floor(linha.altura) });
     }
   }

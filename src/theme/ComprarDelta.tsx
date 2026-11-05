@@ -302,7 +302,7 @@ export default function ComprarDelta({
     rolarAte(Math.max(0, topo - folga), () => titulo.focus({ preventScroll: true }));
   };
 
-  // Opções dos filtros, com contagem (bem-vinda nas páginas internas).
+  // Opções dos filtros, sem número de carros em cada uma (pedido de 04/11/2026).
   const ligados = ativos(filtros);
   const marcaOpcoes: Opcao[] = useMemo(() => {
     const { withLogo } = groupBrands(facets.brands, facets.brandLogos);
@@ -314,10 +314,9 @@ export default function ComprarDelta({
         rotulo: m?.label ?? b,
         logo: m?.logo,
         estilo: m ? brandLogoStyle(m.logo) : undefined,
-        detalhe: contagemNoun(facets.counts.brand[b] ?? 0, noun),
       };
     });
-  }, [facets, noun]);
+  }, [facets]);
   const grupoDeMarcas = filtros.brand === "Outros" && (filtros.brands?.length ?? 0) > 0;
   const opcoesMarca = grupoDeMarcas ? [...marcaOpcoes, { valor: OUTRAS, rotulo: "Outras marcas" }] : marcaOpcoes;
   const marcaAtual = grupoDeMarcas ? OUTRAS : filtros.brand;
@@ -360,7 +359,6 @@ export default function ComprarDelta({
   const grupoChips = (
     titulo: string,
     valores: string[],
-    contar: Record<string, number>,
     atual: string | undefined,
     rotular: (v: string) => string,
     aplicar: (v?: string) => void,
@@ -372,7 +370,6 @@ export default function ComprarDelta({
           {valores.map((v) => (
             <button key={v} type="button" className="dl-chip" aria-pressed={atual === v} onClick={() => aplicar(atual === v ? undefined : v)}>
               {rotular(v)}
-              <small>{contar[v] ?? 0}</small>
             </button>
           ))}
         </div>
@@ -417,23 +414,21 @@ export default function ComprarDelta({
   const chips = (
     <>
       {facets.vehicleTypes.length > 1 &&
-        grupoChips("Tipo", facets.vehicleTypes, facets.counts.vehicleType, filtros.vehicleType, vehicleTypeLabel, (v) => ir({ ...filtros, vehicleType: v }))}
+        grupoChips("Tipo", facets.vehicleTypes, filtros.vehicleType, vehicleTypeLabel, (v) => ir({ ...filtros, vehicleType: v }))}
       {grupoChips(
         "Carroceria",
         facets.segments,
-        facets.counts.segment,
         filtros.segment,
         (v) => v,
         (v) => ir({ ...filtros, segment: v }),
       )}
-      {grupoChips("Câmbio", facets.transmissions, facets.counts.transmission, filtros.transmission, transmissionLabel, (v) =>
+      {grupoChips("Câmbio", facets.transmissions, filtros.transmission, transmissionLabel, (v) =>
         ir({ ...filtros, transmission: v }),
       )}
-      {grupoChips("Combustível", facets.fuels, facets.counts.fuel, filtros.fuel, fuelLabel, (v) => ir({ ...filtros, fuel: v }))}
+      {grupoChips("Combustível", facets.fuels, filtros.fuel, fuelLabel, (v) => ir({ ...filtros, fuel: v }))}
       {grupoChips(
         "Cor",
         facets.colors,
-        facets.counts.color,
         filtros.color,
         (v) => v,
         (v) => ir({ ...filtros, color: v }),
@@ -598,7 +593,8 @@ export default function ComprarDelta({
                     irParaFaixa(g.faixa!.id);
                   }}
                 >
-                  {g.faixa!.rotulo}
+                  <span className="dl-barra__faixa-longa">{g.faixa!.rotulo}</span>
+                  <span className="dl-barra__faixa-curta">{g.faixa!.rotulo.replace(/R\$\s*/g, "")}</span>
                 </a>
               ))}
             </div>
@@ -665,7 +661,6 @@ export default function ComprarDelta({
                         {faixa.rotulo}
                       </h2>
                       <span className="dl-comprar__faixa-traco" aria-hidden="true" />
-                      {!temMais && <span className="dl-comprar__faixa-conta">{contagem(g.carros.length)}</span>}
                       {soEsta && (
                         <button
                           type="button"

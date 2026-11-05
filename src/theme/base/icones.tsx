@@ -1,7 +1,7 @@
 import type { ComponentType, SVGProps } from "react";
 import type { BoxIconProps } from "@boxicons/react";
 import {
-  ArrowDown, Camera, Cookie, Fullscreen, Images, MapIcon, Menu, RotateCw, SliderAlt, SwapVertical, Undo,
+  ArrowDown, Camera, Cookie, Fullscreen, Images, MapIcon, Menu, Pause, Play, RotateCw, SliderAlt, SwapVertical, Undo,
 } from "@boxicons/react";
 
 /*
@@ -25,6 +25,8 @@ export {
 
 export const ArrowDownIcon = boxIcon(ArrowDown);
 export const MenuIcon = boxIcon(Menu);
+export const PauseIcon = boxIcon(Pause);
+export const PlayIcon = boxIcon(Play);
 export const FiltrosIcon = boxIcon(SliderAlt);
 export const OrdemIcon = boxIcon(SwapVertical);
 export const MapaIcon = boxIcon(MapIcon);
