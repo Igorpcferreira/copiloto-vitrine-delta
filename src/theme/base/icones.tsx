@@ -1,8 +1,9 @@
 import type { ComponentType, SVGProps } from "react";
 import type { BoxIconProps } from "@boxicons/react";
 import {
-  ArrowDown, Camera, Cookie, Fullscreen, Images, MapIcon, Menu, Pause, Play, RotateCw, SliderAlt, SwapVertical, Undo,
+  ArrowDown, Camera, Motorcycle, Truck, Cookie, Fullscreen, Images, MapIcon, Menu, Pause, Play, RotateCw, SliderAlt, SwapVertical, Undo,
 } from "@boxicons/react";
+import { CarIcon } from "@/components/icons";
 
 /*
  * Ícones do Delta, só Boxicons (regra do usuário). Os que a base já tem vêm de
@@ -24,6 +25,16 @@ export {
 } from "@/components/icons";
 
 export const ArrowDownIcon = boxIcon(ArrowDown);
+const MotorcycleIcon = boxIcon(Motorcycle);
+const TruckIcon = boxIcon(Truck);
+
+/** O ícone do tipo de veículo da loja (regra 22 da skill): nunca um carro fixo. */
+export function VehicleTypeIcon({ type, ...props }: IconProps & { type?: string }) {
+  if (type === "motorcycle") return <MotorcycleIcon {...props} />;
+  if (type === "truck") return <TruckIcon {...props} />;
+  return <CarIcon {...props} />;
+}
+
 export const MenuIcon = boxIcon(Menu);
 export const PauseIcon = boxIcon(Pause);
 export const PlayIcon = boxIcon(Play);

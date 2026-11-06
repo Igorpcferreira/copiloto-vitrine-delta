@@ -99,11 +99,11 @@ export default function PainelBusca({
           <Escolha
             prefixo="dl"
             className="dl-painel__carroceria"
-            rotulo="Carroceria"
+            rotulo={noun.type === "car" ? "Carroceria" : "Categoria"}
             opcoes={categorias.map((c) => ({ valor: c.nome, rotulo: c.nome }))}
             valor={segmento}
             vazio="Todas"
-            tituloFolha="Escolha a carroceria"
+            tituloFolha={noun.type === "car" ? "Escolha a carroceria" : "Escolha a categoria"}
             aoEscolher={setSegmento}
           />
         )}

@@ -2243,6 +2243,10 @@ label.dl-cookies__linha {
   overflow: hidden;
   background: var(--dl-soft);
 }
+.dl-fita__imagem:empty {
+  aspect-ratio: auto;
+  min-height: clamp(48px, 12vw, 168px);
+}
 .dl-fita__foto {
   object-fit: cover;
   object-position: 50% 78%;

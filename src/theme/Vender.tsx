@@ -8,7 +8,7 @@ import { SELL_STEPS, SELL_VEHICLE_TYPES, useSellWizard, type SellFormState } fro
 import { article, myPossessive, possessive, type StockNoun } from "@/lib/stock-noun";
 import type { TenantConfig } from "@/lib/types";
 import type { VenderProps } from "@/props";
-import { CameraIcon, CarIcon, CheckIcon, PhoneIcon, WhatsAppIcon, XIcon } from "./base/icones";
+import { CameraIcon, CheckIcon, PhoneIcon, VehicleTypeIcon, WhatsAppIcon, XIcon } from "./base/icones";
 import { DEMO } from "./base/useLead";
 import { cx, externo, telefone, zap } from "./base/util";
 import { useNoun } from "./contexto";
@@ -218,7 +218,7 @@ function PistaVertical({ config, noun: nounDaRota, inicial = {} }: { config: Ten
 
       <div className="dl-vender__corpo">
         <span ref={carro} className="dl-vender__carro" aria-hidden="true" data-chegou={enviado || undefined}>
-          {enviado ? <CheckIcon size={18} /> : <CarIcon size={18} />}
+          {enviado ? <CheckIcon size={18} /> : <VehicleTypeIcon type={w.form.vehicleType} size={18} />}
         </span>
         <ol ref={pista} className="dl-vender__pista" aria-label="Etapas">
           {SELL_STEPS.map((nome, i) => {

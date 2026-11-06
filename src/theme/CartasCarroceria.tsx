@@ -9,6 +9,7 @@ import type { Vehicle } from "@/lib/types";
 import type { Categoria } from "./base/montar";
 import { ArrowLeftIcon, ArrowRightIcon, VirarIcon, VoltarIcon } from "./base/icones";
 import { carroHref, comprar, cx, preco, versao } from "./base/util";
+import { useNoun } from "./contexto";
 import LinhaChegada from "./LinhaChegada";
 
 /** Proporção da foto na frente da carta (largura / altura), para o ponto focal achar o carro inteiro. */
@@ -18,6 +19,7 @@ const NO_VERSO = 2;
 
 function Carta({ categoria, carros, base, indice }: { categoria: Categoria; carros: Vehicle[]; base: string; indice: number }) {
   const id = useId();
+  const noun = useNoun();
   const [virada, setVirada] = useState(false);
   const frente = useRef<HTMLButtonElement>(null);
   const verso = useRef<HTMLButtonElement>(null);
@@ -78,11 +80,11 @@ function Carta({ categoria, carros, base, indice }: { categoria: Categoria; carr
               ))}
             </ul>
           ) : (
-            <p className="dl-carroceria__vazio">Os carros desta carroceria estão no estoque.</p>
+            <p className="dl-carroceria__vazio">{noun.feminine ? "As" : "Os"} {noun.plural} desta {noun.type === "car" ? "carroceria" : "categoria"} estão no estoque.</p>
           )}
           <div className="dl-carroceria__acoes">
             <Link href={comprar(base, categoria.params)} className="dl-carroceria__todos" tabIndex={virada ? undefined : -1}>
-              Ver todos
+              {noun.feminine ? "Ver todas" : "Ver todos"}
               <ArrowRightIcon size={15} />
             </Link>
             <button ref={verso} type="button" className="dl-chip dl-carroceria__virar" tabIndex={virada ? undefined : -1} onClick={() => virar(false)}>
@@ -105,6 +107,7 @@ function Carta({ categoria, carros, base, indice }: { categoria: Categoria; carr
  * carta troca de lado sem girar.
  */
 export default function CartasCarroceria({ base, categorias, carros }: { base: string; categorias: Categoria[]; carros: Vehicle[] }) {
+  const noun = useNoun();
   const fileira = useRef<HTMLUListElement>(null);
   const [pontas, setPontas] = useState({ inicio: true, fim: true });
   const porCategoria = useMemo(
@@ -140,18 +143,18 @@ export default function CartasCarroceria({ base, categorias, carros }: { base: s
   };
 
   return (
-    <section className="dl dl-carrocerias" aria-labelledby="dl-carrocerias-titulo" data-dl-setor="Carrocerias">
+    <section className="dl dl-carrocerias" aria-labelledby="dl-carrocerias-titulo" data-dl-setor={noun.type === "car" ? "Carrocerias" : "Categorias"}>
       <div className="dl-wrap">
         <LinhaChegada
           id="dl-carrocerias-titulo"
-          titulo="Escolha pela carroceria"
+          titulo={noun.type === "car" ? "Escolha pela carroceria" : "Escolha pela categoria"}
           extra={
             !(pontas.inicio && pontas.fim) ? (
               <div className="dl-setas">
-                <button type="button" className="dl-seta" aria-label="Carrocerias anteriores" disabled={pontas.inicio} onClick={() => andar(-1)}>
+                <button type="button" className="dl-seta" aria-label={noun.type === "car" ? "Carrocerias anteriores" : "Categorias anteriores"} disabled={pontas.inicio} onClick={() => andar(-1)}>
                   <ArrowLeftIcon size={18} />
                 </button>
-                <button type="button" className="dl-seta" aria-label="Próximas carrocerias" disabled={pontas.fim} onClick={() => andar(1)}>
+                <button type="button" className="dl-seta" aria-label={noun.type === "car" ? "Próximas carrocerias" : "Próximas categorias"} disabled={pontas.fim} onClick={() => andar(1)}>
                   <ArrowRightIcon size={18} />
                 </button>
               </div>

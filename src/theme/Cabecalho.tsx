@@ -10,6 +10,7 @@ import { hasContrast, raisedSurface } from "@/lib/brand-vars";
 import Dialogo from "./base/Dialogo";
 import { ArrowRightIcon, ClockIcon, MailIcon, MenuIcon, PhoneIcon, SearchIcon, WhatsAppIcon, XIcon } from "./base/icones";
 import LogoLoja from "./base/LogoLoja";
+import { useNoun } from "./contexto";
 import { externo, inicio, telefone, zap } from "./base/util";
 
 /** Mola das placas: andam juntas quando se fundem na aba e quando voltam aos cantos. */
@@ -47,6 +48,7 @@ function tintaDoCabecalho(config: TenantConfig) {
  * (`headerStyle`, `--header-bg`, `--header-text`).
  */
 export default function Cabecalho({ config, base }: { config: TenantConfig; base: string }) {
+  const noun = useNoun();
   const path = usePathname();
   const home = inicio(base);
   const [recolhido, setRecolhido] = useState(false);
@@ -144,7 +146,7 @@ export default function Cabecalho({ config, base }: { config: TenantConfig; base
               ref={botaoBusca}
               type="button"
               className="dl-cab__acao dl-cab__acao--busca"
-              aria-label={buscando ? "Fechar busca" : "Buscar um carro"}
+              aria-label={buscando ? "Fechar busca" : `Buscar ${noun.feminine ? "uma" : "um"} ${noun.singular}`}
               aria-expanded={buscando}
               onClick={() => setBuscando((b) => !b)}
             >

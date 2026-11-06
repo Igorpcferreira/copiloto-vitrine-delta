@@ -9,6 +9,12 @@ import { ArrowLeftIcon, ArrowRightIcon, CheckIcon, WhatsAppIcon } from "./base/i
 import { cx, externo, zap } from "./base/util";
 import { useNoun } from "./contexto";
 
+const EXEMPLOS: Record<string, { marca: string; modelo: string }> = {
+  car: { marca: "Ex: Fiat", modelo: "Ex: Argo Drive" },
+  motorcycle: { marca: "Ex: Honda", modelo: "Ex: CG 160 Titan" },
+  truck: { marca: "Ex: Volkswagen", modelo: "Ex: Constellation 24.280" },
+};
+
 /**
  * Venda e financiamento do Delta, "venda em três toques": uma placa baixa partida por um corte
  * diagonal. À esquerda, na cor principal, a pergunta, as etapas e o financiamento; à direita, um
@@ -29,6 +35,7 @@ export default function VendaTresToques({ config, base }: { config: TenantConfig
   const [sentido, setSentido] = useState<1 | -1>(1);
   const [modo, setModo] = useState(modos[0]?.id ?? "");
   const [marca, setMarca] = useState("");
+  const exemplos = EXEMPLOS[noun.type ?? ""];
   const [modelo, setModelo] = useState("");
   const [ano, setAno] = useState("");
   // Mesma mensagem do financiamento no Halo e no Atlas.
@@ -148,7 +155,7 @@ export default function VendaTresToques({ config, base }: { config: TenantConfig
                   <input type="hidden" name="modo" value={modo} />
                   <label className="dl-campo">
                     <span className="dl-campo__rotulo">Marca</span>
-                    <input name="marca" value={marca} onChange={(e) => setMarca(e.target.value)} placeholder="Ex: Fiat" autoComplete="off" maxLength={60} />
+                    <input name="marca" value={marca} onChange={(e) => setMarca(e.target.value)} placeholder={exemplos?.marca} autoComplete="off" maxLength={60} />
                   </label>
                   <label className="dl-campo">
                     <span className="dl-campo__rotulo">Modelo</span>
@@ -156,7 +163,7 @@ export default function VendaTresToques({ config, base }: { config: TenantConfig
                       name="modelo"
                       value={modelo}
                       onChange={(e) => setModelo(e.target.value)}
-                      placeholder="Ex: Argo Drive"
+                      placeholder={exemplos?.modelo}
                       autoComplete="off"
                       maxLength={80}
                     />

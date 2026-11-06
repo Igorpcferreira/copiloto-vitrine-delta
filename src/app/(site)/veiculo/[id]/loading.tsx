@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/Skeleton";
 
 export default function Loading() {
   return (
-    <div className="dl-wrap dl-esperando dl-esperando--carro" role="status" aria-label="Carregando o carro">
+    <div className="dl-wrap dl-esperando dl-esperando--carro" role="status" aria-label="Carregando o veículo">
       <Skeleton className="dl-espera-foto-grande" />
       <div className="dl-esperando__lado">
         <Skeleton className="dl-espera-titulo" />

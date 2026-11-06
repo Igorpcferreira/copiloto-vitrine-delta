@@ -5,10 +5,12 @@ import Link from "next/link";
 import { useId, useRef, useState, type KeyboardEvent } from "react";
 import { AnimatePresence, m } from "motion/react";
 import { isRenderableImageSrc } from "@/lib/image-src";
+import { stockNoun } from "@/lib/stock-noun";
 import type { Vehicle } from "@/lib/types";
 import type { Grupo } from "./base/montar";
 import { ArrowRightIcon } from "./base/icones";
 import { carroHref, combustivel, comprar, cx, ficha, foto, posicao, preco, precoAnterior, selo, versao } from "./base/util";
+import { useNoun } from "./contexto";
 import LinhaChegada from "./LinhaChegada";
 
 /** O pole e quatro atrás dele. */
@@ -22,6 +24,7 @@ const ASPECTO_POLE = 1.5;
  * "Ver o carro".
  */
 function Pole({ carro, base }: { carro: Vehicle; base: string }) {
+  const tipo = stockNoun([carro.vehicleType ?? "car"]);
   const [fotoAtual, setFotoAtual] = useState(0);
   const fotos = carro.photos.slice(0, 4);
   const anterior = precoAnterior(carro);
@@ -56,7 +59,7 @@ function Pole({ carro, base }: { carro: Vehicle; base: string }) {
             </span>
           </span>
           {fotos.length > 1 && (
-            <div className="dl-pole__miniaturas" role="group" aria-label="Fotos do carro">
+            <div className="dl-pole__miniaturas" role="group" aria-label={`Fotos ${tipo.feminine ? "da" : "do"} ${tipo.singular}`}>
               {fotos.map((f, i) => (
                 <button
                   key={f + i}
@@ -89,7 +92,7 @@ function Pole({ carro, base }: { carro: Vehicle; base: string }) {
             <p className="dl-pole__ficha">{[...ficha(carro), combustivel(carro)].filter(Boolean).join(" · ")}</p>
           </div>
           <Link href={carroHref(base, carro)} className="dl-btn dl-btn--acao dl-pole__ver">
-            Ver o carro
+            Ver {tipo.feminine ? "a" : "o"} {tipo.singular}
             <ArrowRightIcon size={18} />
           </Link>
         </div>
@@ -108,6 +111,7 @@ function Pole({ carro, base }: { carro: Vehicle; base: string }) {
  * Sem contagem. No celular, o da frente em cima e os outros numa fileira que desliza.
  */
 export default function GridLargada({ base, grupos }: { base: string; grupos: Grupo[] }) {
+  const noun = useNoun();
   const id = useId();
   const [atual, setAtual] = useState(0);
   const [sentido, setSentido] = useState<1 | -1>(1);
@@ -156,8 +160,8 @@ export default function GridLargada({ base, grupos }: { base: string; grupos: Gr
       <div className="dl-wrap">
         <LinhaChegada
           id="dl-grid-titulo"
-          titulo="Prontos para rodar"
-          acao={{ href: comprar(base, grupo.params), rotulo: "Ver todos" }}
+          titulo={noun.feminine ? "Prontas para rodar" : "Prontos para rodar"}
+          acao={{ href: comprar(base, grupo.params), rotulo: noun.feminine ? "Ver todas" : "Ver todos" }}
           extra={
             grupos.length > 1 ? (
               <div className="dl-chave dl-chave--linha" role="tablist" aria-label="Vitrine" onKeyDown={teclas}>
@@ -231,7 +235,7 @@ export default function GridLargada({ base, grupos }: { base: string; grupos: Gr
                 </AnimatePresence>
               </div>
               {atras.length > 0 && (
-                <ul className="dl-grid__atras" aria-label="Escolha outro carro para ver na frente">
+                <ul className="dl-grid__atras" aria-label={`Escolha ${noun.feminine ? "outra" : "outro"} ${noun.singular} para ver na frente`}>
                   {atras.map((carro) => {
                     const capa = foto(carro, 0);
                     return (

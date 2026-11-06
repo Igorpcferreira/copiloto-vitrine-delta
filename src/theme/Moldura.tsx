@@ -41,7 +41,7 @@ export default function Moldura({
           </main>
           {config.sections.ctaBanner && (
             <Suspense>
-              <Fita config={config} base={base} />
+              <Fita config={config} base={base} noun={noun} />
             </Suspense>
           )}
           <Suspense>

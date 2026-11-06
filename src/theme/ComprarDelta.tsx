@@ -416,7 +416,7 @@ export default function ComprarDelta({
       {facets.vehicleTypes.length > 1 &&
         grupoChips("Tipo", facets.vehicleTypes, filtros.vehicleType, vehicleTypeLabel, (v) => ir({ ...filtros, vehicleType: v }))}
       {grupoChips(
-        "Carroceria",
+        noun.type === "car" ? "Carroceria" : "Categoria",
         facets.segments,
         filtros.segment,
         (v) => v,
@@ -632,7 +632,7 @@ export default function ComprarDelta({
 
         {carros.length === 0 ? (
           <div className="dl-comprar__vazio">
-            <p className="dl-comprar__vazio-titulo">{ligados.length > 0 ? `Nenhum ${noun.singular} com esses filtros` : "O estoque está sendo atualizado"}</p>
+            <p className="dl-comprar__vazio-titulo">{ligados.length > 0 ? `${noun.feminine ? "Nenhuma" : "Nenhum"} ${noun.singular} com esses filtros` : "O estoque está sendo atualizado"}</p>
             <p>{ligados.length > 0 ? "Tire um filtro ou busque por outra marca." : "Volte daqui a pouco ou fale com a gente pelo WhatsApp."}</p>
             {ligados.length > 0 && (
               <button type="button" className="dl-btn dl-btn--acao" onClick={() => ir({ sort: filtros.sort })}>

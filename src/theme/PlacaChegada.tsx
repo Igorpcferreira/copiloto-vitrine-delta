@@ -3,13 +3,13 @@
 import { useEffect, useState } from "react";
 import { useConsent } from "@/lib/consent";
 import type { TenantConfig } from "@/lib/types";
-import { CarIcon, CheckIcon, ClockIcon, MailIcon, MapaIcon, PhoneIcon, PinIcon, WhatsAppIcon } from "./base/icones";
+import { CheckIcon, ClockIcon, VehicleTypeIcon, MailIcon, MapaIcon, PhoneIcon, PinIcon, WhatsAppIcon } from "./base/icones";
 import { externo, mapaEmbed, telefone, zap } from "./base/util";
 import { MAP_NEEDS_CONSENT } from "./consent-choice";
+import { useNoun } from "./contexto";
 import MapFrame from "./MapFrame";
 
 const MODOS = [
-  { id: "driving", rotulo: "De carro" },
   { id: "walking", rotulo: "A pé" },
   { id: "transit", rotulo: "De transporte" },
 ] as const;
@@ -41,6 +41,7 @@ export default function PlacaChegada({
   mapa?: boolean;
   setor?: string;
 }) {
+  const noun = useNoun();
   const consentimento = useConsent();
   const [abriu, setAbriu] = useState(false);
   const [copiou, setCopiou] = useState(false);
@@ -110,9 +111,12 @@ export default function PlacaChegada({
               </div>
               <div className="dl-chegada__modos" role="group" aria-label="Como você vem? Abre a rota no Google Maps">
                 <span className="dl-chegada__pergunta">Como você vem?</span>
+                <a href={rota(config, "driving")} {...externo} className="dl-chip dl-chip--link">
+                  <VehicleTypeIcon type={noun.type} size={15} />
+                  {noun.type ? `De ${noun.singular}` : "Dirigindo"}
+                </a>
                 {MODOS.map((m) => (
                   <a key={m.id} href={rota(config, m.id)} {...externo} className="dl-chip dl-chip--link">
-                    {m.id === "driving" && <CarIcon size={15} />}
                     {m.rotulo}
                   </a>
                 ))}

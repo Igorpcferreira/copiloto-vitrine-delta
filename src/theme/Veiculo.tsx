@@ -204,7 +204,7 @@ export default function Veiculo({ config, base, vehicle: v, others }: VeiculoPro
       ["Potência", v.power],
       ...(tipo === "car" ? [["Portas", v.doors ? String(v.doors) : undefined]] : []),
       ...(tipo === "truck" ? [["Direção", v.steering]] : []),
-      ["Carroceria", v.segment],
+      [tipo === "car" ? "Carroceria" : "Categoria", v.segment],
       ["Garantia", v.warranty],
     ] as [string, string | undefined][]
   ).filter(([, valor]) => valor) as [string, string][];
@@ -433,7 +433,7 @@ export default function Veiculo({ config, base, vehicle: v, others }: VeiculoPro
 
       {others.length > 0 && (
         <section className="dl-wrap dl-veiculo__outros" aria-labelledby={`${id}-outros`}>
-          <LinhaChegada id={`${id}-outros`} titulo={`Outros ${nome.plural}`} acao={{ href: comprar(base), rotulo: "Ver o estoque" }} />
+          <LinhaChegada id={`${id}-outros`} titulo={`${nome.feminine ? "Outras" : "Outros"} ${nome.plural}`} acao={{ href: comprar(base), rotulo: "Ver o estoque" }} />
           <div className="dl-grade dl-veiculo__outros-grade">
             {others.map((o) => (
               <Cartao key={o.id} carro={o} base={base} />

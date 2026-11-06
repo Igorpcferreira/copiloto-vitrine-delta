@@ -1,11 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { isRenderableImageSrc } from "@/lib/image-src";
+import { DEFAULT_STOCK_NOUN, type StockNoun } from "@/lib/stock-noun";
 import type { TenantConfig } from "@/lib/types";
 import { ArrowRightIcon } from "./base/icones";
 import { botaoBanner } from "./base/util";
-
-const IMAGEM_PADRAO = "/defaults/cta-cars.webp";
 
 /**
  * Banner final do Delta, "fita de chegada": a imagem do CTA inteira na largura, sem edição, e
@@ -14,13 +13,18 @@ const IMAGEM_PADRAO = "/defaults/cta-cars.webp";
  * ligado à rolagem, fora da linha principal; parada com movimento reduzido). No celular o título
  * fica em cima e o botão embaixo, com outro estilo do "Fale com a gente" do rodapé.
  */
-export default function Fita({ config, base }: { config: TenantConfig; base: string }) {
-  const imagem = isRenderableImageSrc(config.ctaImageUrl) ? config.ctaImageUrl : IMAGEM_PADRAO;
+export default function Fita({ config, base, noun = DEFAULT_STOCK_NOUN }: { config: TenantConfig; base: string; noun?: StockNoun }) {
+  // A imagem padrão só tem carros: nas outras lojas, o banner ou uma foto da própria loja (regra 22 da skill).
+  const imagem = isRenderableImageSrc(config.ctaImageUrl)
+    ? config.ctaImageUrl
+    : noun.type === "car"
+      ? "/defaults/cta-cars.webp"
+      : [config.bannerUrl, config.storePhotos?.[0]].find(isRenderableImageSrc);
   const titulo = config.ctaTitle?.trim() || "Sua próxima reta começa aqui.";
   return (
     <section className="dl dl-fita" aria-labelledby="dl-fita-titulo" data-dl-setor="Chegada">
       <div className="dl-fita__imagem">
-        <Image src={imagem} alt="" fill sizes="100vw" className="dl-fita__foto" />
+        {imagem && <Image src={imagem} alt="" fill sizes="100vw" className="dl-fita__foto" />}
       </div>
       <div className="dl-fita__faixa">
         <div className="dl-fita__conteudo">
